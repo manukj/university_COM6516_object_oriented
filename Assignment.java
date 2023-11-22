@@ -4,14 +4,11 @@
 public class Assignment {
 
     public static void main(String[] args) {
-        MyLinkedObject list = new MyLinkedObject("d");
-        list.setWord("d");
-        list.setWord("b");
-        list.setWord("c");
-        list.setWord("c");
-        list.setWord("d");
-        list.setWord("a");
-        list.setWord("a");
+        MyLinkedObject list = new MyLinkedObject("aa");
+        list.setWord("aaa");
+        list.setWord("aab");
+        list.setWord("hello");
+
      
         
         //print the list by iterating through it
