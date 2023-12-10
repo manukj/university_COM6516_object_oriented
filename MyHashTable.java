@@ -35,13 +35,13 @@ public class MyHashTable {
     public void printHashTable() {
         // print the hash table by iterating through it and printing each linked list
         for (int i = 0; i < hashTable.length; i++) {
-            System.out.print(i + ": ");
+            System.out.println("--------------------" + i + "--------------------");
             MyLinkedObject current = hashTable[i];
             while (current != null) {
                 System.out.print(current);
                 current = current.getNext();
             }
-            System.out.println();
+             System.out.println("--------------------------------------------------");
         }
     }
 

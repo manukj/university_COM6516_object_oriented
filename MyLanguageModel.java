@@ -24,6 +24,7 @@ public class MyLanguageModel {
         for (String word : words) {
             hashTable.add(word);
         }
+        hashTable.printHashTable();
         System.out.println("Total word count" + hashTable.getTotalWordCount());
         System.out.println("Total Unique count" + hashTable.getUniqueWordCount());
 
