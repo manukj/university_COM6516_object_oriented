@@ -1,8 +1,23 @@
+/*
+ * Author : Manu Kenchappa Junjanna
+ * Email : mkenchappajunjanna1@sheffield.ac.uk
+ * Created on Sun Dec 10 2023
+ */
+
+/**
+ * Represents a linked object in a linked list.
+ */
 class MyLinkedObject {
     private String word;
     private int count;
     private MyLinkedObject next;
 
+    /**
+     * Constructs a new MyLinkedObject with the specified word.
+     * The count is initialized to 1 and the next reference is set to null.
+     * 
+     * @param word the word to be stored in the MyLinkedObject
+     */
     public MyLinkedObject(String word) {
         this.word = word;
         this.count = 1;
@@ -25,6 +40,16 @@ class MyLinkedObject {
         return count;
     }
 
+    /**
+     * Sets the word of the MyLinkedObject.
+     * If the word is the same as the current word, the count is incremented.
+     * If the word is greater than the current word, a new MyLinkedObject is created
+     * and set as the next.
+     * If the word is less than the current word, the current MyLinkedObject is
+     * cloned and the word is updated.
+     * 
+     * @param w the word to be set
+     */
     public void setWord(String w) {
         int result = w.compareTo(word);
         if (result == 0) {

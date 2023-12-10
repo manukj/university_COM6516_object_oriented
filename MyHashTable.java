@@ -1,11 +1,17 @@
-//The MyHashTable class is created with m (the hash table size) linked lists of, initially, the length ‘0’ (zero). A word sequence is stored to one of the linked lists, selected by your choice of a hash function, hence the array of linked objects grows, utilising instance methods provided by the MyLinkedObject class.
-//The MyHashTable class provides the following methods:
-//• public MyHashTable(int m) — constructor, creates an array of m linked lists of length ‘0’ (zero).
+/*
+ * Author : Manu Kenchappa Junjanna
+ * Email : mkenchappajunjanna1@sheffield.ac.uk
+ * Created on Sun Dec 10 2023
+ */
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * This class represents a hash table data structure.
+ * It stores objects of type MyLinkedObject using a hash function to determine their position in the table.
+ */
 public class MyHashTable {
     private MyLinkedObject[] hashTable;
     private int hashTableSize;
@@ -26,7 +32,6 @@ public class MyHashTable {
         }
     }
 
-    // print the hash table by iterating through it and save it in file "output.txt", also each linked list let it be in one line
     public void printHashTable() {
         try {
             FileWriter fileWriter = new FileWriter("output.txt");
@@ -44,6 +49,5 @@ public class MyHashTable {
             e.printStackTrace();
         }
     }
-    
 
 }

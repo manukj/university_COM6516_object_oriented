@@ -1,3 +1,8 @@
+/*
+ * Author : Manu Kenchappa Junjanna
+ * Email : mkenchappajunjanna1@sheffield.ac.uk
+ * Created on Sun Dec 10 2023
+ */
 
 public class FirstHashFunction implements MyHashFunction {
     private int hashTableSize;
@@ -6,11 +11,16 @@ public class FirstHashFunction implements MyHashFunction {
         this.hashTableSize = hashTableSize;
     }
 
+    /**
+     * Calculates the hash value for the given input string.
+     * The hash value is determined by taking the ASCII value of the first character
+     * of the input string and performing modulo operation with the hash table size.
+     *
+     * @param input the input string
+     * @return the hash value
+     */
     @Override
     public int hash(String input) {
-        // the first letter of a word sequence — e.g., its unicode value modulo ‘the
-        // hash table size’, i.e., a remainder of the division of a unicode value by the
-        // hash table size m
         int hash = input.charAt(0) % hashTableSize;
         return hash;
     }
