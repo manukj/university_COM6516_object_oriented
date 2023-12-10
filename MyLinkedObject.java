@@ -50,10 +50,11 @@ class MyLinkedObject {
      * 
      * @param w the word to be set
      */
-    public void setWord(String w) {
+    public int setWord(String w) {
         int result = w.compareTo(word);
         if (result == 0) {
             count++;
+            return 0;
         } else if (result > 0) {
             if (next == null) {
                 next = new MyLinkedObject(w);
@@ -65,6 +66,7 @@ class MyLinkedObject {
             word = w;
             next = newLinkedObject;
         }
+        return 1;
     }
 
     public String getWord() {
@@ -84,6 +86,6 @@ class MyLinkedObject {
 
     @Override
     public String toString() {
-        return "word = " + word + " and count = " + count;
+        return word + " | " + count + " | --->";
     }
 }

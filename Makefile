@@ -13,5 +13,5 @@ clean:
 
 # This target cleans all built class, then compiles and runs Aliens Program.
 run: clean
-	javac Assignment.java
-	java Assignment
+	javac MyLanguageModel.java
+	java MyLanguageModel
