@@ -9,23 +9,23 @@ public class Assignment {
     }
 
     private static void testFirstHashFunction() {
-        FirstHashFunction hashFunction = new FirstHashFunction();
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
-        System.out.println(hashFunction.hash("hello", 10));
-        System.out.println(hashFunction.hash("world", 10));
+        FirstHashFunction hashFunction = new FirstHashFunction(10);
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
+        System.out.println(hashFunction.hash("hello"));
+        System.out.println(hashFunction.hash("world"));
     }
 
     private static void testMyLinkedObject() {

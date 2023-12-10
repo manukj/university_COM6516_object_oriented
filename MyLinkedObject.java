@@ -25,13 +25,6 @@ class MyLinkedObject {
         return count;
     }
 
-    public MyLinkedObject clone() {
-        MyLinkedObject newLinkedObject = new MyLinkedObject(word);
-        newLinkedObject.seCount(count);
-        newLinkedObject.setNext(next);
-        return newLinkedObject;
-    }
-
     public void setWord(String w) {
         int result = w.compareTo(word);
         if (result == 0) {
@@ -47,6 +40,17 @@ class MyLinkedObject {
             word = w;
             next = newLinkedObject;
         }
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public MyLinkedObject clone() {
+        MyLinkedObject newLinkedObject = new MyLinkedObject(word);
+        newLinkedObject.seCount(count);
+        newLinkedObject.setNext(next);
+        return newLinkedObject;
     }
 
     public int compareTo(String w) {

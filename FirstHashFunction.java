@@ -1,8 +1,13 @@
 
 public class FirstHashFunction implements MyHashFunction {
+    private int hashTableSize;
+
+    public FirstHashFunction(int hashTableSize) {
+        this.hashTableSize = hashTableSize;
+    }
 
     @Override
-    public int hash(String input,int hashTableSize) {
+    public int hash(String input) {
         // the first letter of a word sequence — e.g., its unicode value modulo ‘the
         // hash table size’, i.e., a remainder of the division of a unicode value by the
         // hash table size m
