@@ -1,7 +1,8 @@
+package hash_table;
 /*
  * Author : Manu Kenchappa Junjanna
  * Email : mkenchappajunjanna1@sheffield.ac.uk
- * Created on Sun Dec 10 2023
+ * Created on Sun Dec 3 2023
  */
 
 /**
@@ -22,6 +23,8 @@ public class MyHashTable {
     }
 
     public void add(String word) {
+        if (word == null || word.isEmpty())
+            return;
         totalWordCount++;
         int hash = hashFunction.hash(word);
         if (hashTable[hash] == null) {
@@ -41,7 +44,7 @@ public class MyHashTable {
                 System.out.print(current);
                 current = current.getNext();
             }
-             System.out.println("--------------------------------------------------");
+            System.out.println("--------------------------------------------------");
         }
     }
 

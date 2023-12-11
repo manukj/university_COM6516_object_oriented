@@ -1,7 +1,8 @@
+package hash_table;
 /*
  * Author : Manu Kenchappa Junjanna
  * Email : mkenchappajunjanna1@sheffield.ac.uk
- * Created on Sun Dec 10 2023
+ * Created on Sun Dec 3 2023
  */
 
 public interface MyHashFunction {
