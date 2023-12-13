@@ -12,9 +12,8 @@ import hash_table.MyHashTable;
 public class MyLanguageModel {
 
     public static void main(String[] args) {
-
         Frame frame = new Frame();
-        StringBuilder wordsInStringBuilder = MyFileReader.readFile("news.txt", (ReadFileUICallback) frame);
+        StringBuilder wordsInStringBuilder = MyFileReader.readFile("test.txt", (ReadFileUICallback) frame);
         String[] words = wordsInStringBuilder.toString().split("\\s+|\\n");
         MyHashTable hashTable = new MyHashTable(10);
         for (String word : words) {
