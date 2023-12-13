@@ -7,6 +7,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,6 +35,12 @@ public class HashTablePanel extends JPanel {
         }
         jTable = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(jTable);
+
+        JPanel topPanel = new JPanel();
+        topPanel.add(new JLabel("Total words: " + table.getTotalWordCount()));
+        topPanel.add(new JLabel("Total Unique Words: " + table.getUniqueWordCount()));
+        add(topPanel, BorderLayout.NORTH);
+
         add(scrollPane, BorderLayout.CENTER);
     }
 

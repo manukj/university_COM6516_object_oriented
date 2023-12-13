@@ -69,7 +69,7 @@ public class Frame implements ReadFileUICallback {
         container.remove(loading);
         container.remove(error);
         hashTablePanel = new HashTablePanel(hashTable);
-        container.add(hashTablePanel, BorderLayout.EAST);
+        container.add(hashTablePanel, BorderLayout.CENTER);
     }
 
     public void cleanUp() {
