@@ -16,10 +16,11 @@ import javax.swing.JPanel;
 import hash_table.MyHashTable;
 
 public class Frame implements ReadFileUICallback {
-    private MyHashTable hashTable;
     private JFrame frame;
     private JPanel loading, error;
     private Container container;
+    private HashTablePanel hashTablePanel;
+    InputReadFilePanel inputReadFilePanel;
 
     public Frame() {
         // write a code to create a Jframe with full screen
@@ -44,8 +45,8 @@ public class Frame implements ReadFileUICallback {
     public void onFileReadingComplete(StringBuilder wordsBuilder) {
         container.remove(loading);
         container.remove(error);
-        InputReadFilePanel panel = new InputReadFilePanel(wordsBuilder);
-        container.add(panel, BorderLayout.CENTER);
+        inputReadFilePanel = new InputReadFilePanel(wordsBuilder);
+        container.add(inputReadFilePanel, BorderLayout.PAGE_START);
     }
 
     @Override
@@ -58,6 +59,9 @@ public class Frame implements ReadFileUICallback {
     }
 
     public void renderHashTable(MyHashTable hashTable) {
+        container.remove(loading);
+        container.remove(error);
+        container.add(new HashTablePanel(hashTable), BorderLayout.PAGE_START);
     }
 
 }

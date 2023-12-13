@@ -11,7 +11,7 @@ package hash_table;
  * their position in the table.
  */
 public class MyHashTable {
-    private MyLinkedObject[] hashTable;
+    public MyLinkedObject[] hashTable;
     private int hashTableSize;
     private MyHashFunction hashFunction;
     private int totalWordCount = 0, uniqueWordCount = 0;
