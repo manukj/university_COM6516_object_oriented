@@ -25,7 +25,7 @@ public class MyFileReader {
             e.printStackTrace();
             callback.onFileReadingError(e.getMessage());
         }
-        callback.onFileReadingComplete(content);
+        callback.onFileReadingComplete(content, filePath);
         return content;
     }
 }

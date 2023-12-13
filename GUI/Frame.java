@@ -12,7 +12,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import hash_table.MyHashTable;
@@ -50,11 +49,11 @@ public class Frame implements ReadFileUICallback {
     }
 
     @Override
-    public void onFileReadingComplete(StringBuilder wordsBuilder) {
+    public void onFileReadingComplete(StringBuilder wordsBuilder, String filePath) {
         // container.remove(loading);
         // container.remove(error);
-        // inputReadFilePanel = new InputReadFilePanel(wordsBuilder);
-        container.add(new JLabel("Testeed"), BorderLayout.PAGE_START);
+        inputReadFilePanel = new InputReadFilePanel(wordsBuilder,filePath);
+        container.add(inputReadFilePanel, BorderLayout.WEST);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class Frame implements ReadFileUICallback {
         container.remove(loading);
         container.remove(error);
         hashTablePanel = new HashTablePanel(hashTable);
-        container.add(hashTablePanel, BorderLayout.PAGE_START);
+        container.add(hashTablePanel, BorderLayout.EAST);
     }
 
     public void cleanUp() {
@@ -83,7 +82,9 @@ public class Frame implements ReadFileUICallback {
 
         if (hashTablePanel != null) {
             hashTablePanel.cleanUp();
-
+        }
+        if (inputReadFilePanel != null) {
+            inputReadFilePanel.cleanUp();
         }
         // Release references to objects
         loading = null;

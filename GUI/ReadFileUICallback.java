@@ -8,6 +8,6 @@ package GUI;
 
 public interface ReadFileUICallback {
     void onFileReading(String filePath);
-    void onFileReadingComplete(StringBuilder wordsBuilder);
+    void onFileReadingComplete(StringBuilder wordsBuilder, String filePath);
     void onFileReadingError(String errorMessage);
 }
