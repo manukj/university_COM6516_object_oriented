@@ -24,8 +24,8 @@ public class MyFileReader {
         } catch (IOException e) {
             e.printStackTrace();
             callback.onFileReadingError(e.getMessage());
+            return null;
         }
-        callback.onFileReadingComplete(content, filePath);
         return content;
     }
 }

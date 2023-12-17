@@ -11,13 +11,13 @@ package hash_table;
  * their position in the table.
  */
 public class MyHashTable {
-    public MyLinkedObject[] hashTable;
+    public MyLinkedObject[] linkedList;
     private int hashTableSize;
     private MyHashFunction hashFunction;
     private int totalWordCount = 0, uniqueWordCount = 0;
 
     public MyHashTable(int m) {
-        hashTable = new MyLinkedObject[m];
+        linkedList = new MyLinkedObject[m];
         hashTableSize = m;
         hashFunction = new FirstHashFunction(hashTableSize);
     }
@@ -27,19 +27,19 @@ public class MyHashTable {
             return;
         totalWordCount++;
         int hash = hashFunction.hash(word);
-        if (hashTable[hash] == null) {
-            hashTable[hash] = new MyLinkedObject(word);
+        if (linkedList[hash] == null) {
+            linkedList[hash] = new MyLinkedObject(word);
             uniqueWordCount++;
         } else {
-            uniqueWordCount += hashTable[hash].setWord(word);
+            uniqueWordCount += linkedList[hash].setWord(word);
         }
     }
 
     public void printHashTable() {
         // print the hash table by iterating through it and printing each linked list
-        for (int i = 0; i < hashTable.length; i++) {
+        for (int i = 0; i < linkedList.length; i++) {
             System.out.println("--------------------" + i + "--------------------");
-            MyLinkedObject current = hashTable[i];
+            MyLinkedObject current = linkedList[i];
             while (current != null) {
                 System.out.print(current);
                 current = current.getNext();

@@ -8,12 +8,18 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import hash_table.MyFileReader;
 import hash_table.MyHashTable;
 
 public class Frame implements ReadFileUICallback {
@@ -22,6 +28,7 @@ public class Frame implements ReadFileUICallback {
     private Container container;
     private HashTablePanel hashTablePanel;
     private InputReadFilePanel inputReadFilePanel;
+    private JButton pickFileButton;
 
     public Frame() {
         // write a code to create a Jframe with full screen
@@ -31,13 +38,56 @@ public class Frame implements ReadFileUICallback {
         container = frame.getContentPane();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
         frame.setVisible(true);
+
+        initaliseFilePicker();
+        initalisePanels();
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 cleanUp();
             }
         });
+    }
+
+    private void initalisePanels() {
+        // filePickerAndResultPanel = new JPanel();
+        // filePickerAndResultPanel.add(pickFileButton);
+        container.add(pickFileButton, BorderLayout.NORTH);
+    }
+
+    private void initaliseFilePicker() {
+        pickFileButton = new JButton("Pick File");
+        pickFileButton = new JButton("Pick a File");
+        pickFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                File defaultDirectory = new File("./");
+                fileChooser.setCurrentDirectory(defaultDirectory);
+                int result = fileChooser.showOpenDialog(container);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    StringBuilder wordsInStringBuilder = MyFileReader.readFile(selectedFile.getAbsolutePath(),
+                            (ReadFileUICallback) Frame.this);
+                    if (wordsInStringBuilder != null) {
+                        String[] words = wordsInStringBuilder.toString().split("\\s+|\\n");
+                        MyHashTable hashTable = new MyHashTable(10);
+                        for (String word : words) {
+                            hashTable.add(word);
+                        }
+                        System.out.println("Total words: " + hashTable.getTotalWordCount());
+                        renderInputReadFile(wordsInStringBuilder, selectedFile.getAbsolutePath());
+                        renderHashTable(hashTable);
+                        // renderCurve(hashTable);
+                        container.repaint();
+                        container.revalidate();
+                    }
+
+                }
+            }
+        });
+
     }
 
     @Override
@@ -52,8 +102,8 @@ public class Frame implements ReadFileUICallback {
     public void onFileReadingComplete(StringBuilder wordsBuilder, String filePath) {
         // container.remove(loading);
         // container.remove(error);
-        inputReadFilePanel = new InputReadFilePanel(wordsBuilder,filePath);
-        container.add(inputReadFilePanel, BorderLayout.WEST);
+        // inputReadFilePanel = new InputReadFilePanel(wordsBuilder,filePath);
+        // container.add(inputReadFilePanel, BorderLayout.WEST);
     }
 
     @Override
@@ -63,13 +113,6 @@ public class Frame implements ReadFileUICallback {
         // error.setBackground(java.awt.Color.RED);
         // error.add(new JLabel("Reading file failed " + errorMessage));
         // container.add(error, BorderLayout.CENTER);
-    }
-
-    public void renderHashTable(MyHashTable hashTable) {
-        container.remove(loading);
-        container.remove(error);
-        hashTablePanel = new HashTablePanel(hashTable);
-        container.add(hashTablePanel, BorderLayout.CENTER);
     }
 
     public void cleanUp() {
@@ -91,5 +134,21 @@ public class Frame implements ReadFileUICallback {
         error = null;
         inputReadFilePanel = null;
         hashTablePanel = null;
+    }
+
+    public void renderCurve(MyHashTable hashTable) {
+        DistributionChart chart = new DistributionChart(hashTable);
+        container.add(chart, BorderLayout.CENTER);
+    }
+
+    public void renderHashTable(MyHashTable hashTable) {
+        hashTablePanel = new HashTablePanel(hashTable);
+        container.add(hashTablePanel, BorderLayout.CENTER);
+    }
+
+    public void renderInputReadFile(StringBuilder wordsInStringBuilder, String string) {
+        container.remove(pickFileButton);
+        inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, string);
+        container.add(inputReadFilePanel, BorderLayout.WEST);
     }
 }

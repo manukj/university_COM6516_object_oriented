@@ -23,8 +23,8 @@ public class HashTablePanel extends JPanel {
         setLayout(new BorderLayout());
         DefaultTableModel model = new DefaultTableModel(new String[] { "Word", "Count" }, 0);
 
-        for (int i = 0; i < table.hashTable.length; i++) {
-            MyLinkedObject current = table.hashTable[i];
+        for (int i = 0; i < table.linkedList.length; i++) {
+            MyLinkedObject current = table.linkedList[i];
             while (current != null) {
                 String word = current.getWord();
                 int count = current.getCount();
