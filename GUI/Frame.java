@@ -24,31 +24,29 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import hash_table.MyFileReader;
 import hash_table.MyHashTable;
 import hash_table.MyLinkedObject;
 
-public class Frame implements ReadFileUICallback {
+public class Frame {
     private JFrame frame;
-    private JPanel loading, error;
     private Container container;
     private WordAndCountTable hashTablePanel;
     private InputReadFilePanel inputReadFilePanel;
-    private JButton pickFileButton;
+    private JPanel initalButtonPanel;
 
     public Frame() {
         // write a code to create a Jframe with full screen
         frame = new JFrame();
-        loading = new JPanel();
-        error = new JPanel();
         container = frame.getContentPane();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
 
         initaliseFilePicker();
-        initalisePanels();
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 cleanUp();
@@ -56,12 +54,12 @@ public class Frame implements ReadFileUICallback {
         });
     }
 
-    private void initalisePanels() {
-        container.add(pickFileButton, BorderLayout.NORTH);
-    }
-
     private void initaliseFilePicker() {
-        pickFileButton = new JButton("Pick File");
+        initalButtonPanel = new JPanel();
+        initalButtonPanel.setLayout(new BoxLayout(initalButtonPanel, BoxLayout.Y_AXIS));
+
+        JButton pickFileButton = new JButton("Pick File");
+        JButton pickNewsButton = new JButton("Pick News");
         pickFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -72,74 +70,38 @@ public class Frame implements ReadFileUICallback {
 
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    StringBuilder wordsInStringBuilder = MyFileReader.readFile(selectedFile.getAbsolutePath(),
-                            (ReadFileUICallback) Frame.this);
-                    if (wordsInStringBuilder != null) {
-                        String[] words = wordsInStringBuilder.toString().split("\\s+|\\n");
-                        MyHashTable hashTable = new MyHashTable(10);
-                        for (String word : words) {
-                            hashTable.add(word);
-                        }
-                        System.out.println("Total words: " + hashTable.getTotalWordCount());
-                        container.removeAll();
-                        renderInputReadFile(wordsInStringBuilder, selectedFile.getAbsolutePath());
-                        renderWordAndCountTable(hashTable);
-                        renderDistibutionCurve(hashTable);
-                        container.repaint();
-                        container.revalidate();
-                    }
-
+                    onPagePicked(selectedFile.getAbsolutePath());
                 }
             }
         });
+        pickNewsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onPagePicked("./news.txt");
+            }
+        });
+        initalButtonPanel.add(pickFileButton);
+        initalButtonPanel.add(pickNewsButton);
+        container.add(initalButtonPanel, BorderLayout.NORTH);
     }
 
-    @Override
-    public void onFileReading(String filePath) {
-        loading.setSize(100, 100);
-        loading.setBackground(java.awt.Color.RED);
-        loading.add(new JLabel("Reading file: " + filePath));
-        container.add(loading, BorderLayout.CENTER);
-        container.repaint();
-        container.revalidate();
-    }
-
-    @Override
-    public void onFileReadingComplete(StringBuilder wordsBuilder, String filePath) {
-        // container.remove(loading);
-        // container.remove(error);
-        // inputReadFilePanel = new InputReadFilePanel(wordsBuilder,filePath);
-        // container.add(inputReadFilePanel, BorderLayout.WEST);
-    }
-
-    @Override
-    public void onFileReadingError(String errorMessage) {
-        // container.remove(loading);
-        // error.setSize(100, 100);
-        // error.setBackground(java.awt.Color.RED);
-        // error.add(new JLabel("Reading file failed " + errorMessage));
-        // container.add(error, BorderLayout.CENTER);
-    }
-
-    public void cleanUp() {
-        frame.dispose();
-
-        // Remove components from the container
-        // container.remove(loading);
-        // container.remove(error);
-        // container.remove(inputReadFilePanel);
-
-        if (hashTablePanel != null) {
-            hashTablePanel.cleanUp();
+    public void onPagePicked(String filePath) {
+        StringBuilder wordsInStringBuilder = MyFileReader.readFile(filePath);
+        if (wordsInStringBuilder != null) {
+            String[] words = wordsInStringBuilder.toString().split("\\s+|\\n");
+            MyHashTable hashTable = new MyHashTable(10);
+            for (String word : words) {
+                hashTable.add(word);
+            }
+            System.out.println("Total words: " + hashTable.getTotalWordCount());
+            container.removeAll();
+            renderInputReadFile(wordsInStringBuilder, filePath);
+            renderWordAndCountTable(hashTable);
+            renderDistibutionCurve(hashTable);
+            container.repaint();
+            container.revalidate();
         }
-        if (inputReadFilePanel != null) {
-            inputReadFilePanel.cleanUp();
-        }
-        // Release references to objects
-        loading = null;
-        error = null;
-        inputReadFilePanel = null;
-        hashTablePanel = null;
+
     }
 
     public void renderDistibutionCurve(MyHashTable hashTable) {
@@ -163,11 +125,24 @@ public class Frame implements ReadFileUICallback {
 
         DistributionBarPanel chart = new DistributionBarPanel(distributionData);
 
-        JLabel titleLabel = new JLabel("Word Frequency Distribution");
+        JLabel titleLabel = new JLabel("Word Distribution in Linked List");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        JLabel subTitleLabel = new JLabel("Number of words in each linked list");
+        JLabel subTitleLabel = new JLabel(
+                "The bars represent the number of Unique words in each index of the linked list");
+
+        String[] columnNames = { "Index", "Total Words" };
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        for (Map.Entry<Integer, Integer> entry : distributionData.entrySet()) {
+            int index = entry.getKey();
+            int frequency = entry.getValue();
+            model.addRow(new Object[] { index, frequency });
+        }
+        JTable jTable = new JTable(model);
+        jTable.setAutoCreateRowSorter(true);
+
         textPanel.add(titleLabel);
         textPanel.add(subTitleLabel);
+        textPanel.add(jTable);
 
         distributionPanel.add(chart);
         distributionPanel.add(textPanel);
@@ -183,5 +158,18 @@ public class Frame implements ReadFileUICallback {
     public void renderInputReadFile(StringBuilder wordsInStringBuilder, String string) {
         inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, string);
         container.add(inputReadFilePanel, BorderLayout.CENTER);
+    }
+
+    public void cleanUp() {
+        frame.dispose();
+        if (hashTablePanel != null) {
+            hashTablePanel.cleanUp();
+        }
+        if (inputReadFilePanel != null) {
+            inputReadFilePanel.cleanUp();
+        }
+        // Release references to objects
+        inputReadFilePanel = null;
+        hashTablePanel = null;
     }
 }

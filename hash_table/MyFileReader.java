@@ -9,13 +9,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import GUI.ReadFileUICallback;
-
 public class MyFileReader {
 
-    public static StringBuilder readFile(String filePath, ReadFileUICallback callback) {
+    public static StringBuilder readFile(String filePath) {
         StringBuilder content = new StringBuilder();
-        callback.onFileReading(filePath);
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -23,7 +20,6 @@ public class MyFileReader {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            callback.onFileReadingError(e.getMessage());
             return null;
         }
         return content;
