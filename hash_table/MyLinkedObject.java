@@ -81,10 +81,6 @@ public class MyLinkedObject {
         return newLinkedObject;
     }
 
-    public int compareTo(String w) {
-        return this.word.compareTo(w);
-    }
-
     @Override
     public String toString() {
         return word + " | " + count + " | --->";
