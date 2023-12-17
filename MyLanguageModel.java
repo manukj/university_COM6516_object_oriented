@@ -4,22 +4,21 @@
  * Created on Sun Dec 3 2023
  */
 
-import GUI.Frame;
+import hash_table.MyFileReader;
+import n_gram.NGram;
 
 public class MyLanguageModel {
-    private static final String INPUT_FILE = "test.txt";
+    private static final String INPUT_FILE = "./test.txt";
 
     public static void main(String[] args) {
-        Frame frame = new Frame();
-        // StringBuilder wordsInStringBuilder = MyFileReader.readFile(INPUT_FILE, (ReadFileUICallback) frame);
-        // String[] words = wordsInStringBuilder.toString().split("\\s+|\\n");
-        // MyHashTable hashTable = new MyHashTable(10);
-        // for (String word : words) {
-        //     hashTable.add(word);
-        // }
-        // frame.renderInputReadFile(wordsInStringBuilder, INPUT_FILE);
-        // frame.renderHashTable(hashTable);
-        // frame.renderCurve(hashTable);
+        // Frame frame = new Frame();
+        StringBuilder wordsInStringBuilder = MyFileReader.readFile(INPUT_FILE);
+        // create a bigram model
+        NGram biGram = new NGram(wordsInStringBuilder.toString().split(" "), 3);
+        for (String nGramArray : biGram.getNGramArray()) {
+            System.out.println(nGramArray);
+        }
+
     }
 
 }
