@@ -8,25 +8,32 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import hash_table.MyFileReader;
 import hash_table.MyHashTable;
+import hash_table.MyLinkedObject;
 
 public class Frame implements ReadFileUICallback {
     private JFrame frame;
     private JPanel loading, error;
     private Container container;
-    private HashTablePanel hashTablePanel;
+    private WordAndCountTable hashTablePanel;
     private InputReadFilePanel inputReadFilePanel;
     private JButton pickFileButton;
 
@@ -50,14 +57,11 @@ public class Frame implements ReadFileUICallback {
     }
 
     private void initalisePanels() {
-        // filePickerAndResultPanel = new JPanel();
-        // filePickerAndResultPanel.add(pickFileButton);
         container.add(pickFileButton, BorderLayout.NORTH);
     }
 
     private void initaliseFilePicker() {
         pickFileButton = new JButton("Pick File");
-        pickFileButton = new JButton("Pick a File");
         pickFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,9 +81,10 @@ public class Frame implements ReadFileUICallback {
                             hashTable.add(word);
                         }
                         System.out.println("Total words: " + hashTable.getTotalWordCount());
+                        container.removeAll();
                         renderInputReadFile(wordsInStringBuilder, selectedFile.getAbsolutePath());
-                        renderHashTable(hashTable);
-                        // renderCurve(hashTable);
+                        renderWordAndCountTable(hashTable);
+                        renderDistibutionCurve(hashTable);
                         container.repaint();
                         container.revalidate();
                     }
@@ -87,15 +92,16 @@ public class Frame implements ReadFileUICallback {
                 }
             }
         });
-
     }
 
     @Override
     public void onFileReading(String filePath) {
-        // loading.setSize(100, 100);
-        // loading.setBackground(java.awt.Color.RED);
-        // loading.add(new JLabel("Reading file: " + filePath));
-        // container.add(loading, BorderLayout.CENTER);
+        loading.setSize(100, 100);
+        loading.setBackground(java.awt.Color.RED);
+        loading.add(new JLabel("Reading file: " + filePath));
+        container.add(loading, BorderLayout.CENTER);
+        container.repaint();
+        container.revalidate();
     }
 
     @Override
@@ -136,19 +142,44 @@ public class Frame implements ReadFileUICallback {
         hashTablePanel = null;
     }
 
-    public void renderCurve(MyHashTable hashTable) {
-        DistributionChart chart = new DistributionChart(hashTable);
-        container.add(chart, BorderLayout.CENTER);
+    public void renderDistibutionCurve(MyHashTable hashTable) {
+        JPanel distributionPanel = new JPanel();
+        distributionPanel.setLayout(new FlowLayout());
+
+        JPanel textPanel = new JPanel();
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+
+        Map<String, Integer> distributionData = new HashMap<String, Integer>();
+        for (int i = 0; i < hashTable.linkedList.length; i++) {
+            int count = 0;
+            MyLinkedObject current = hashTable.linkedList[i];
+            while (current != null) {
+                count++;
+                current = current.getNext();
+            }
+            distributionData.put("i = " + i, count);
+        }
+        DistributionPanel chart = new DistributionPanel(distributionData);
+
+        JLabel titleLabel = new JLabel("Word Frequency Distribution");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel subTitleLabel = new JLabel("Number of words in each linked list");
+        textPanel.add(titleLabel);
+        textPanel.add(subTitleLabel);
+
+        distributionPanel.add(chart);
+        distributionPanel.add(textPanel);
+
+        container.add(distributionPanel, BorderLayout.SOUTH);
     }
 
-    public void renderHashTable(MyHashTable hashTable) {
-        hashTablePanel = new HashTablePanel(hashTable);
-        container.add(hashTablePanel, BorderLayout.CENTER);
+    public void renderWordAndCountTable(MyHashTable hashTable) {
+        hashTablePanel = new WordAndCountTable(hashTable);
+        container.add(hashTablePanel, BorderLayout.EAST);
     }
 
     public void renderInputReadFile(StringBuilder wordsInStringBuilder, String string) {
-        container.remove(pickFileButton);
         inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, string);
-        container.add(inputReadFilePanel, BorderLayout.WEST);
+        container.add(inputReadFilePanel, BorderLayout.CENTER);
     }
 }

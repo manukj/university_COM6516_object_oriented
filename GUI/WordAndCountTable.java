@@ -19,13 +19,13 @@ import javax.swing.table.DefaultTableModel;
 import hash_table.MyHashTable;
 import hash_table.MyLinkedObject;
 
-public class HashTablePanel extends JPanel {
+public class WordAndCountTable extends JPanel {
     private JTable jTable;
     private JScrollPane scrollPane;
     // deault sorting is based on alphabetical order
     private boolean isSortedByAlphabetical = true;
 
-    public HashTablePanel(MyHashTable table) {
+    public WordAndCountTable(MyHashTable table) {
         setLayout(new BorderLayout());
         TreeMap<String, Integer> map = new TreeMap<>();
         for (int i = 0; i < table.linkedList.length; i++) {
@@ -40,8 +40,8 @@ public class HashTablePanel extends JPanel {
         }
         // render the unique and total word counts in the table
         JPanel topPanel = new JPanel();
-        topPanel.add(new JLabel("Total words: " + table.getTotalWordCount()));
-        topPanel.add(new JLabel("Total Unique Words: " + table.getUniqueWordCount()));
+        topPanel.add(new JLabel("| Total words: " + table.getTotalWordCount() + " ||"));
+        topPanel.add(new JLabel("|| Total Unique Words: " + table.getUniqueWordCount() + " |"));
         JButton sortButton = new JButton("Toogle Sort");
         sortButton.addActionListener(e -> {
             if (isSortedByAlphabetical) {
