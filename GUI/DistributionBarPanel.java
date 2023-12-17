@@ -8,13 +8,13 @@ import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-public class DistributionPanel extends JPanel {
+public class DistributionBarPanel extends JPanel {
 
-    private Map<String, Integer> distributionData;
+    private Map<Integer, Integer> distributionData;
 
-    public DistributionPanel(Map<String, Integer> distributionData) {
+    public DistributionBarPanel(Map<Integer, Integer> distributionData) {
         this.distributionData = distributionData;
-        setPreferredSize(new Dimension(400, 300));
+        setPreferredSize(new Dimension(550, 300));
         setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
@@ -28,23 +28,23 @@ public class DistributionPanel extends JPanel {
 
         // find the max frequency
         int maxFrequency = 0;
-        for (Map.Entry<String, Integer> entry : distributionData.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : distributionData.entrySet()) {
             int frequency = entry.getValue();
             if (frequency > maxFrequency) {
                 maxFrequency = frequency;
             }
         }
 
-        for (Map.Entry<String, Integer> entry : distributionData.entrySet()) {
-            String word = entry.getKey();
+        for (Map.Entry<Integer, Integer> entry : distributionData.entrySet()) {
+            int index = entry.getKey();
             int frequency = entry.getValue();
 
-            int barHeight = frequency * getHeight() / maxFrequency;
+            int barHeight = frequency * (getHeight()) / maxFrequency;
             g.setColor(Color.blue);
             g.fillRect(xOffset, yOffset - barHeight, barWidth, barHeight);
 
             g.setColor(Color.RED);
-            g.drawString(word, xOffset, getHeight() - 20);
+            g.drawString("i = " + index, xOffset, getHeight() - 20);
 
             xOffset += barWidth + 20;
         }

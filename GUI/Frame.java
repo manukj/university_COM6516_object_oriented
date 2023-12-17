@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
@@ -149,7 +149,7 @@ public class Frame implements ReadFileUICallback {
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-        Map<String, Integer> distributionData = new HashMap<String, Integer>();
+        Map<Integer, Integer> distributionData = new LinkedHashMap<>();
         for (int i = 0; i < hashTable.linkedList.length; i++) {
             int count = 0;
             MyLinkedObject current = hashTable.linkedList[i];
@@ -157,9 +157,11 @@ public class Frame implements ReadFileUICallback {
                 count++;
                 current = current.getNext();
             }
-            distributionData.put("i = " + i, count);
+            distributionData.put(i, count);
+            System.out.println(distributionData);
         }
-        DistributionPanel chart = new DistributionPanel(distributionData);
+
+        DistributionBarPanel chart = new DistributionBarPanel(distributionData);
 
         JLabel titleLabel = new JLabel("Word Frequency Distribution");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
