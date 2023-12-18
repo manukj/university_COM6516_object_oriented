@@ -18,7 +18,7 @@ public class NGram {
         }
     }
 
-    public String[] getNGramArray() {
+    public String[] getArray() {
         return nGramArray;
     }
 

@@ -33,6 +33,7 @@ public class MyHashTable {
         } else {
             uniqueWordCount += linkedList[hash].setWord(word);
         }
+        System.out.println("Word: " + word + " Hash: " + hash);
     }
 
     public void printHashTable() {
@@ -54,5 +55,17 @@ public class MyHashTable {
 
     public int getUniqueWordCount() {
         return uniqueWordCount;
+    }
+
+    public int getCount(String word) {
+        int hash = hashFunction.hash(word);
+        MyLinkedObject current = linkedList[hash];
+        while (current != null) {
+            if (current.getWord().equals(word)) {
+                return current.getCount();
+            }
+            current = current.getNext();
+        }
+        return 0;
     }
 }
