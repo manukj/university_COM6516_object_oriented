@@ -8,28 +8,22 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
+import constants.Constants;
 import hash_table.MyFileReader;
 import hash_table.MyHashTable;
-import hash_table.MyLinkedObject;
+import n_gram.NGramProbabilityCalculation;
 
 public class Frame {
     private JFrame frame;
@@ -37,6 +31,7 @@ public class Frame {
     private WordAndCountTable hashTablePanel;
     private InputReadFilePanel inputReadFilePanel;
     private JPanel initalButtonPanel;
+    private NGramProbabilityCalculation nGramProbabilityCalculation;
 
     public Frame() {
         // write a code to create a Jframe with full screen
@@ -86,68 +81,36 @@ public class Frame {
     }
 
     public void onPagePicked(String filePath) {
-        StringBuilder wordsInStringBuilder = MyFileReader.readFile(filePath);
+        StringBuilder wordsInStringBuilder = MyFileReader.readFile(filePath, Constants.MAX_CHAR_LIMIT);
+
         if (wordsInStringBuilder != null) {
-            String[] words = wordsInStringBuilder.toString().split("\\s+|\\n");
-            MyHashTable hashTable = new MyHashTable(10);
-            for (String word : words) {
-                hashTable.add(word);
+            String[] data = wordsInStringBuilder.toString().split("\\s+|\\n");
+
+            // create Unigram Hash Table
+            MyHashTable uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+            for (String word : data) {
+                uniGramHashTable.add(word);
             }
-            System.out.println("Total words: " + hashTable.getTotalWordCount());
+
+            // initalise a instance of nGramProbabilityCalculation, which is later used for
+            // probability calculation
+            nGramProbabilityCalculation = new NGramProbabilityCalculation(data,
+                    uniGramHashTable);
+
+            // render the UI for unigram
             container.removeAll();
             renderInputReadFile(wordsInStringBuilder, filePath);
-            renderWordAndCountTable(hashTable);
-            renderDistibutionCurve(hashTable);
+            renderWordAndCountTable(uniGramHashTable);
+            renderBottomLayer(uniGramHashTable);
             container.repaint();
             container.revalidate();
         }
 
     }
 
-    public void renderDistibutionCurve(MyHashTable hashTable) {
-        JPanel distributionPanel = new JPanel();
-        distributionPanel.setLayout(new FlowLayout());
-
-        JPanel textPanel = new JPanel();
-        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-
-        Map<Integer, Integer> distributionData = new LinkedHashMap<>();
-        for (int i = 0; i < hashTable.linkedList.length; i++) {
-            int count = 0;
-            MyLinkedObject current = hashTable.linkedList[i];
-            while (current != null) {
-                count++;
-                current = current.getNext();
-            }
-            distributionData.put(i, count);
-            System.out.println(distributionData);
-        }
-
-        DistributionBarPanel chart = new DistributionBarPanel(distributionData);
-
-        JLabel titleLabel = new JLabel("Word Distribution in Linked List");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        JLabel subTitleLabel = new JLabel(
-                "The bars represent the number of Unique words in each index of the linked list");
-
-        String[] columnNames = { "Index", "Total Words" };
-        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-        for (Map.Entry<Integer, Integer> entry : distributionData.entrySet()) {
-            int index = entry.getKey();
-            int frequency = entry.getValue();
-            model.addRow(new Object[] { index, frequency });
-        }
-        JTable jTable = new JTable(model);
-        jTable.setAutoCreateRowSorter(true);
-
-        textPanel.add(titleLabel);
-        textPanel.add(subTitleLabel);
-        textPanel.add(jTable);
-
-        distributionPanel.add(chart);
-        distributionPanel.add(textPanel);
-
-        container.add(distributionPanel, BorderLayout.SOUTH);
+    public void renderBottomLayer(MyHashTable hashTable) {
+        BottomLayer bottomLayer = new BottomLayer(hashTable);
+        container.add(bottomLayer, BorderLayout.SOUTH);
     }
 
     public void renderWordAndCountTable(MyHashTable hashTable) {

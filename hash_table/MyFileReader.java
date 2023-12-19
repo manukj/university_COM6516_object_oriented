@@ -11,12 +11,16 @@ import java.io.IOException;
 
 public class MyFileReader {
 
-    public static StringBuilder readFile(String filePath) {
+    public static StringBuilder readFile(String filePath, int maxCharLimit) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
+                if (content.length() + line.length() <= maxCharLimit) {
+                    content.append(line).append("\n");
+                } else {
+                    break;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
