@@ -2,25 +2,33 @@ package GUI;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import hash_table.MyHashTable;
 import hash_table.MyLinkedObject;
+import n_gram.NGramProbabilityCalculation;
 
 /**
  * BottomLayer
  */
 public class BottomLayer extends JPanel {
     JPanel distributionPanel, textPanel;
+    NGramProbabilityCalculation nGramProbabilityCalculation;
 
-    public BottomLayer(MyHashTable hashTable) {
+    public BottomLayer(MyHashTable hashTable, NGramProbabilityCalculation nGramProbabilityCalculation) {
+        this.nGramProbabilityCalculation = nGramProbabilityCalculation;
         distributionPanel = new JPanel();
         distributionPanel.setLayout(new FlowLayout());
 
@@ -39,6 +47,90 @@ public class BottomLayer extends JPanel {
         }
         renderDistributionBar(hashTable, distributionData);
         renderTextPanel(distributionData);
+        renderProbabilityPanel();
+
+        add(distributionPanel);
+    }
+
+    private void renderProbabilityPanel() {
+        JPanel probabilityPanel = new JPanel();
+        probabilityPanel.setLayout(new BoxLayout(probabilityPanel, BoxLayout.Y_AXIS));
+        JLabel titleLabel = new JLabel("Probability Calculation");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        probabilityPanel.add(titleLabel);
+
+        // biagram calculation
+        JLabel biagramTitleLabel = new JLabel("Biagram Probability Calculation");
+        probabilityPanel.add(biagramTitleLabel);
+        JPanel biagramPanel = new JPanel();
+        biagramPanel.setLayout(new FlowLayout());
+
+        JLabel biagramLabel = new JLabel("Input 2 words ");
+        JTextField biagramInput = new JTextField(10);
+        JButton calculateButton = new JButton("Calculate Probability");
+        JTextArea resultArea = new JTextArea(1, 15);
+        resultArea.setEditable(false);
+        biagramPanel.add(biagramLabel);
+        biagramPanel.add(biagramInput);
+        biagramPanel.add(calculateButton);
+
+        probabilityPanel.add(biagramPanel);
+        probabilityPanel.add(resultArea);
+
+        distributionPanel.add(probabilityPanel);
+
+        calculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = biagramInput.getText();
+                String[] words = input.split(" ");
+                if (words.length != 2) {
+                    resultArea.setText("Please input 2 words");
+                    return;
+                }
+                String word1 = words[0];
+                String word2 = words[1];
+                double probability = nGramProbabilityCalculation.getBiGramProbability(word1, word2);
+                resultArea.setText("Probability of " + word2 + " given " + word1 + " is " + probability);
+            }
+        });
+
+        // trigram calculation
+        JLabel trigramTitleLabel = new JLabel("Trigram Probability Calculation");
+        probabilityPanel.add(trigramTitleLabel);
+        JPanel trigramPanel = new JPanel();
+        trigramPanel.setLayout(new FlowLayout());
+
+        JLabel trigramLabel = new JLabel("Input 3 words ");
+        JTextField trigramInput = new JTextField(10);
+        JButton calculateButton2 = new JButton("Calculate Probability");
+        JTextArea resultArea2 = new JTextArea(1, 15);
+        resultArea2.setEditable(false);
+        trigramPanel.add(trigramLabel);
+        trigramPanel.add(trigramInput);
+        trigramPanel.add(calculateButton2);
+
+        probabilityPanel.add(trigramPanel);
+        probabilityPanel.add(resultArea2);
+
+        distributionPanel.add(probabilityPanel);
+
+        calculateButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = trigramInput.getText();
+                String[] words = input.split(" ");
+                if (words.length != 3) {
+                    resultArea2.setText("Please input 3 words");
+                    return;
+                }
+                String word1 = words[0];
+                String word2 = words[1];
+                String word3 = words[2];
+                double probability = nGramProbabilityCalculation.getTriGramProbability(word1, word2, word3);
+                resultArea2.setText("Probability of " + word3 + " given " + word1 + " " + word2 + " is " + probability);
+            }
+        });
     }
 
     private void renderTextPanel(Map<Integer, Integer> distributionData) {
@@ -62,7 +154,6 @@ public class BottomLayer extends JPanel {
         textPanel.add(jTable);
 
         distributionPanel.add(textPanel);
-        add(distributionPanel);
     }
 
     private void renderDistributionBar(MyHashTable hashTable, Map<Integer, Integer> distributionData) {

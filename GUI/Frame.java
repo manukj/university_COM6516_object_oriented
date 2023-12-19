@@ -109,7 +109,7 @@ public class Frame {
     }
 
     public void renderBottomLayer(MyHashTable hashTable) {
-        BottomLayer bottomLayer = new BottomLayer(hashTable);
+        BottomLayer bottomLayer = new BottomLayer(hashTable, nGramProbabilityCalculation);
         container.add(bottomLayer, BorderLayout.SOUTH);
     }
 
