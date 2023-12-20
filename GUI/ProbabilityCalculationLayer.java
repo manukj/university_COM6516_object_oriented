@@ -16,6 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import hash_table.MyHashTable;
 import n_gram.NGramProbabilityCalculation;
@@ -30,8 +33,13 @@ public class ProbabilityCalculationLayer extends JPanel {
         this.nGramProbabilityCalculation = nGramProbabilityCalculation;
 
         JPanel probabilityPanel = new JPanel();
+        EmptyBorder emptyBorder = new EmptyBorder(10, 10, 10, 10);
+        LineBorder lineBorder = new LineBorder(Color.BLACK);
+        CompoundBorder compoundBorder = new CompoundBorder(lineBorder, emptyBorder);
+        probabilityPanel.setBorder(compoundBorder);
+
         probabilityPanel.setLayout(new BoxLayout(probabilityPanel, BoxLayout.Y_AXIS));
-        probabilityPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Set alignment to left
+        probabilityPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
         JLabel titleLabel = new JLabel("Probability Calculation");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         probabilityPanel.add(titleLabel);
@@ -40,21 +48,30 @@ public class ProbabilityCalculationLayer extends JPanel {
         inputPanel.setLayout(new FlowLayout());
 
         JLabel biagramLabel = new JLabel("Input Inital words ");
-        JTextField biagramInput = new JTextField(10);
-        JButton calculateButton = new JButton("Calculate Probability");
+        JTextField inputTextField = new JTextField(10);
+        JButton calculateUsingBigram = new JButton("Calculate using Bigram");
+        JButton calculateUsingTrigram = new JButton("Calculate using Trigram");
+        JButton clearButton = new JButton("Clear");
 
         inputPanel.add(biagramLabel);
-        inputPanel.add(biagramInput);
-        inputPanel.add(calculateButton);
+        inputPanel.add(inputTextField);
+        inputPanel.add(calculateUsingBigram);
+        inputPanel.add(calculateUsingTrigram);
+        inputPanel.add(clearButton);
 
         probabilityPanel.add(inputPanel);
 
         JTextArea biagramOutput = new JTextArea(3, 15);
-        JTextArea trigramOutput = new JTextArea(3, 15);
         biagramOutput.setEditable(false);
-        trigramOutput.setEditable(false);
+        biagramOutput.setWrapStyleWord(true);
+        biagramOutput.setLineWrap(true);
         biagramOutput.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         biagramOutput.setBackground(Color.LIGHT_GRAY);
+
+        JTextArea trigramOutput = new JTextArea(3, 15);
+        trigramOutput.setEditable(false);
+        trigramOutput.setWrapStyleWord(true);
+        trigramOutput.setLineWrap(true);
         trigramOutput.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         trigramOutput.setBackground(Color.LIGHT_GRAY);
 
@@ -63,23 +80,56 @@ public class ProbabilityCalculationLayer extends JPanel {
         probabilityPanel.add(trigramOutput);
 
         probabilityPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-        calculateButton.addActionListener(new ActionListener() {
+
+        clearButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String input = biagramInput.getText();
-                if (input.isEmpty()) {
+                inputTextField.setText("");
+                biagramOutput.setText("");
+                biagramOutput.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                biagramOutput.setBackground(Color.LIGHT_GRAY);
+                trigramOutput.setText("");
+                trigramOutput.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+                trigramOutput.setBackground(Color.LIGHT_GRAY);
+            }
+        });
+        calculateUsingBigram.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = inputTextField.getText();
+                try {
+                    biagramOutput.setText(nGramProbabilityCalculation.get20MostFrequentWordsUsingBigram(input));
+                    biagramOutput.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+                    biagramOutput.setBackground(new Color(220, 255, 220));
+                } catch (IllegalArgumentException exception) {
+                    biagramOutput.setBorder(BorderFactory.createLineBorder(Color.RED));
+                    biagramOutput.setBackground(new Color(255, 220, 220));
+                    biagramOutput.setText(exception.getMessage());
+                } catch (Exception ex) {
                     biagramOutput.setBorder(BorderFactory.createLineBorder(Color.RED));
                     biagramOutput.setBackground(new Color(255, 220, 220));
                     biagramOutput.setText("Please input valid words");
-                    return;
                 }
+            }
+        });
 
-                biagramOutput.setText(nGramProbabilityCalculation.get20MostFrequentWordsUsingBigram(input));
-                trigramOutput.setText(nGramProbabilityCalculation.get20MostFrequentWordsUsingTrigram(input));
-                biagramOutput.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-                biagramOutput.setBackground(new Color(220, 255, 220));
-                trigramOutput.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-                trigramOutput.setBackground(new Color(220, 255, 220));
+        calculateUsingTrigram.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String input = inputTextField.getText();
+                try {
+                    trigramOutput.setText(nGramProbabilityCalculation.get20MostFrequentWordsUsingTrigram(input));
+                    trigramOutput.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+                    trigramOutput.setBackground(new Color(220, 255, 220));
+                } catch (IllegalArgumentException exception) {
+                    trigramOutput.setBorder(BorderFactory.createLineBorder(Color.RED));
+                    trigramOutput.setBackground(new Color(255, 220, 220));
+                    trigramOutput.setText(exception.getMessage());
+                } catch (Exception ex) {
+                    trigramOutput.setBorder(BorderFactory.createLineBorder(Color.RED));
+                    trigramOutput.setBackground(new Color(255, 220, 220));
+                    trigramOutput.setText(ex.getMessage());
+                }
             }
         });
 

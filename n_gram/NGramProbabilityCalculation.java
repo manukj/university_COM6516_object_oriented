@@ -65,11 +65,12 @@ public class NGramProbabilityCalculation {
 
     public String get20MostFrequentWordsUsingBigram(String input) {
         if (input.isEmpty()) {
-            return "Cannot predict next word, since input is empty";
+            throw new IllegalArgumentException("Cannot predict next word, since input is empty");
         }
         String[] inputWords = input.split(" ");
         if (uniGramHashTable.getCount(inputWords[inputWords.length - 1]) == 0) {
-            return "Cannot predict next word, since" + input + "is not in the dataset";
+            throw new IllegalArgumentException(
+                    "Cannot predict next word, since \"" + input + "\"is not in the dataset");
         }
         for (int i = 0; i < 20; i++) {
             String[] words = input.split(" ");
@@ -92,12 +93,13 @@ public class NGramProbabilityCalculation {
 
     public String get20MostFrequentWordsUsingTrigram(String input) {
         if (input.isEmpty() || input.split(" ").length < 2) {
-            return ("Cannot predict next word, since input is less the ");
+            throw new IllegalArgumentException("Cannot predict next word, since input is empty");
         }
         String[] inputWords = input.split(" ");
         if (biGramHashTable
                 .getCount(inputWords[inputWords.length - 2] + " " + inputWords[inputWords.length - 1]) == 0) {
-            return "Cannot predict next word, since" + input + "is not in the dataset";
+            throw new IllegalArgumentException(
+                    "Cannot predict next word, since \"" + input + "\" is not in the dataset");
         }
         for (int i = 0; i < 20; i++) {
             String[] words = input.split(" ");
