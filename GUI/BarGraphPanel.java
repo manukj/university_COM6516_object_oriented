@@ -14,11 +14,11 @@ import javax.swing.table.DefaultTableModel;
 
 import hash_table.MyHashTable;
 
-public class BarGraph extends JPanel {
+public class BarGraphPanel extends JPanel {
 
     JPanel distributionPanel, textPanel;
 
-    public BarGraph(MyHashTable hashTable) {
+    public BarGraphPanel(MyHashTable hashTable) {
         Map<Integer, Integer> distributionData = hashTable.getWordsCountPresentInEachLinkedList();
 
         distributionPanel = new JPanel();

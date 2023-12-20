@@ -28,7 +28,7 @@ import util.FileReaderUtil;
 public class Frame {
     private JFrame frame;
     private Container container;
-    private WordAndCountTable hashTablePanel;
+    private WordAndCountTablePanel hashTablePanel;
     private InputReadFilePanel inputReadFilePanel;
     private JPanel initalButtonPanel;
     private NGramProbabilityCalculation nGramProbabilityCalculation;
@@ -115,17 +115,17 @@ public class Frame {
     }
 
     public void renderWordAndCountTable(MyHashTable hashTable) {
-        hashTablePanel = new WordAndCountTable(hashTable);
+        hashTablePanel = new WordAndCountTablePanel(hashTable);
         container.add(hashTablePanel, BorderLayout.CENTER);
     }
 
     private void renderStaticsPanel(MyHashTable uniGramHashTable) {
-        BarGraph barGraph = new BarGraph(uniGramHashTable);
+        BarGraphPanel barGraph = new BarGraphPanel(uniGramHashTable);
         container.add(barGraph, BorderLayout.EAST);
     }
 
     public void renderBottomLayer(MyHashTable hashTable) {
-        ProbabilityCalculationLayer probabilityCalculationLayer = new ProbabilityCalculationLayer(hashTable,
+        ProbabilityCalculationPanel probabilityCalculationLayer = new ProbabilityCalculationPanel(hashTable,
                 nGramProbabilityCalculation);
         container.add(probabilityCalculationLayer, BorderLayout.SOUTH);
     }

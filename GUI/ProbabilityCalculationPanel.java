@@ -26,21 +26,22 @@ import n_gram.NGramProbabilityCalculation;
 /**
  * BottomLayer
  */
-public class ProbabilityCalculationLayer extends JPanel {
+public class ProbabilityCalculationPanel extends JPanel {
     NGramProbabilityCalculation nGramProbabilityCalculation;
 
-    public ProbabilityCalculationLayer(MyHashTable hashTable, NGramProbabilityCalculation nGramProbabilityCalculation) {
+    public ProbabilityCalculationPanel(MyHashTable hashTable, NGramProbabilityCalculation nGramProbabilityCalculation) {
         this.nGramProbabilityCalculation = nGramProbabilityCalculation;
 
         JPanel probabilityPanel = new JPanel();
+        probabilityPanel.setLayout(new BoxLayout(probabilityPanel, BoxLayout.Y_AXIS));
+        probabilityPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
         EmptyBorder emptyBorder = new EmptyBorder(10, 10, 10, 10);
         LineBorder lineBorder = new LineBorder(Color.BLACK);
         CompoundBorder compoundBorder = new CompoundBorder(lineBorder, emptyBorder);
         probabilityPanel.setBorder(compoundBorder);
 
-        probabilityPanel.setLayout(new BoxLayout(probabilityPanel, BoxLayout.Y_AXIS));
-        probabilityPanel.setAlignmentY(Component.LEFT_ALIGNMENT);
-        JLabel titleLabel = new JLabel("Probability Calculation");
+        JLabel titleLabel = new JLabel("Word Prediction ( Probability Calculation)");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         probabilityPanel.add(titleLabel);
 

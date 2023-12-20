@@ -18,13 +18,13 @@ import javax.swing.table.DefaultTableModel;
 
 import hash_table.MyHashTable;
 
-public class WordAndCountTable extends JPanel {
+public class WordAndCountTablePanel extends JPanel {
     private JTable jTable;
     private JScrollPane scrollPane;
     // deault sorting is based on alphabetical order
     private boolean isSortedByAlphabetical = true;
 
-    public WordAndCountTable(MyHashTable table) {
+    public WordAndCountTablePanel(MyHashTable table) {
         setLayout(new BorderLayout());
         TreeMap<String, Integer> map = table.getAllWordAndItsCount();
         // render the unique and total word counts in the table
