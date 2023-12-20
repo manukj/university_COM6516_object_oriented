@@ -5,7 +5,7 @@ package hash_table;
  * Created on Sun Dec 3 2023
  */
 
-public interface MyHashFunction {
+interface MyHashFunction {
     /**
      * Calculates the hash value for the given word.
      *

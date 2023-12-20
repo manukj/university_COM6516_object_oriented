@@ -21,9 +21,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import constants.Constants;
-import hash_table.MyFileReader;
 import hash_table.MyHashTable;
 import n_gram.NGramProbabilityCalculation;
+import util.FileReaderUtil;
 
 public class Frame {
     private JFrame frame;
@@ -81,7 +81,7 @@ public class Frame {
     }
 
     public void onPagePicked(String filePath) {
-        StringBuilder wordsInStringBuilder = MyFileReader.readFile(filePath, Constants.MAX_CHAR_LIMIT);
+        StringBuilder wordsInStringBuilder = FileReaderUtil.readFile(filePath, Constants.MAX_CHAR_LIMIT);
 
         if (wordsInStringBuilder != null) {
             String[] data = wordsInStringBuilder.toString().split("\\s+|\\n");

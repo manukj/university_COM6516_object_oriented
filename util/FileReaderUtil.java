@@ -1,4 +1,4 @@
-package hash_table;
+package util;
 /*
  * Author : Manu Kenchappa Junjanna
  * Email : mkenchappajunjanna1@sheffield.ac.uk
@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class MyFileReader {
+public class FileReaderUtil {
 
     public static StringBuilder readFile(String filePath, int maxCharLimit) {
         StringBuilder content = new StringBuilder();

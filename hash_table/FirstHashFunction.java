@@ -5,7 +5,7 @@ package hash_table;
  * Created on Sun Dec 10 2023
  */
 
-public class FirstHashFunction implements MyHashFunction {
+class FirstHashFunction implements MyHashFunction {
     private int hashTableSize;
 
     public FirstHashFunction(int hashTableSize) {
