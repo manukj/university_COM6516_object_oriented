@@ -1,5 +1,8 @@
 package GUI;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -7,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -45,8 +50,10 @@ public class BottomLayer extends JPanel {
             }
             distributionData.put(i, count);
         }
+
         renderDistributionBar(hashTable, distributionData);
         renderTextPanel(distributionData);
+
         renderProbabilityPanel();
 
         add(distributionPanel);
@@ -55,6 +62,7 @@ public class BottomLayer extends JPanel {
     private void renderProbabilityPanel() {
         JPanel probabilityPanel = new JPanel();
         probabilityPanel.setLayout(new BoxLayout(probabilityPanel, BoxLayout.Y_AXIS));
+        probabilityPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Set alignment to left
         JLabel titleLabel = new JLabel("Probability Calculation");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         probabilityPanel.add(titleLabel);
@@ -70,6 +78,9 @@ public class BottomLayer extends JPanel {
         JButton calculateButton = new JButton("Calculate Probability");
         JTextArea resultArea = new JTextArea(1, 15);
         resultArea.setEditable(false);
+        resultArea.setBorder(BorderFactory.createLineBorder(Color.RED));
+        resultArea.setBackground(new Color(255, 220, 220));
+
         biagramPanel.add(biagramLabel);
         biagramPanel.add(biagramInput);
         biagramPanel.add(calculateButton);
@@ -78,7 +89,7 @@ public class BottomLayer extends JPanel {
         probabilityPanel.add(resultArea);
 
         distributionPanel.add(probabilityPanel);
-
+        probabilityPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         calculateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -90,10 +101,11 @@ public class BottomLayer extends JPanel {
                 }
                 String word1 = words[0];
                 String word2 = words[1];
-                double probability = nGramProbabilityCalculation.getBiGramProbability(word1, word2);
-                resultArea.setText("Probability of " + word2 + " given " + word1 + " is " + probability);
+                resultArea.setText(nGramProbabilityCalculation.getBiGramProbability(word1, word2));
             }
         });
+
+        probabilityPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
         // trigram calculation
         JLabel trigramTitleLabel = new JLabel("Trigram Probability Calculation");
@@ -106,6 +118,8 @@ public class BottomLayer extends JPanel {
         JButton calculateButton2 = new JButton("Calculate Probability");
         JTextArea resultArea2 = new JTextArea(1, 15);
         resultArea2.setEditable(false);
+        resultArea2.setBorder(BorderFactory.createLineBorder(Color.RED));
+        resultArea2.setBackground(new Color(255, 220, 220));
         trigramPanel.add(trigramLabel);
         trigramPanel.add(trigramInput);
         trigramPanel.add(calculateButton2);
@@ -127,8 +141,7 @@ public class BottomLayer extends JPanel {
                 String word1 = words[0];
                 String word2 = words[1];
                 String word3 = words[2];
-                double probability = nGramProbabilityCalculation.getTriGramProbability(word1, word2, word3);
-                resultArea2.setText("Probability of " + word3 + " given " + word1 + " " + word2 + " is " + probability);
+                resultArea2.setText(nGramProbabilityCalculation.getTriGramProbability(word1, word2, word3));
             }
         });
     }
@@ -147,6 +160,7 @@ public class BottomLayer extends JPanel {
             model.addRow(new Object[] { index, frequency });
         }
         JTable jTable = new JTable(model);
+        jTable.setPreferredScrollableViewportSize(new Dimension(250, 300));
         jTable.setAutoCreateRowSorter(true);
 
         textPanel.add(titleLabel);

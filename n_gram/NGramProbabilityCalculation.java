@@ -41,21 +41,19 @@ public class NGramProbabilityCalculation {
         return triGramHashTable.getUniqueWordCount();
     }
 
-    public double getBiGramProbability(String wordK_1, String wordK) {
+    public String getBiGramProbability(String wordK_1, String wordK) {
         int countK_1 = uniGramHashTable.getCount(wordK_1);
         int countK_1_K = biGramHashTable.getCount(wordK_1 + " " + wordK);
         double probability = (double) countK_1_K / countK_1;
-        System.out.println("P(" + wordK + "|" + wordK_1 + ") = " + countK_1_K + "/" + countK_1 + " = " + probability);
-        return probability;
+        return "P(" + wordK + "|" + wordK_1 + ") = " + countK_1_K + "/" + countK_1 + " = " + probability;
     }
 
-    public double getTriGramProbability(String wordK_2, String wordK_1, String wordK) {
+    public String getTriGramProbability(String wordK_2, String wordK_1, String wordK) {
         int countK_2_K_1 = biGramHashTable.getCount(wordK_2 + " " + wordK_1);
         int countK_2_K_1_K = triGramHashTable.getCount(wordK_2 + " " + wordK_1 + " " + wordK);
         double probability = (double) countK_2_K_1_K / countK_2_K_1;
-        System.out.println("P(" + wordK + "|" + wordK_2 + " " + wordK_1 + ") = " + countK_2_K_1_K + "/" + countK_2_K_1
-                + " = " + probability);
-        return probability;
+        return "P(" + wordK + "|" + wordK_2 + " " + wordK_1 + ") = " + countK_2_K_1_K + "/" + countK_2_K_1
+                + " = " + probability;
     }
 
 }

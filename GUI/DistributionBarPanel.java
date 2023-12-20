@@ -14,7 +14,7 @@ public class DistributionBarPanel extends JPanel {
 
     public DistributionBarPanel(Map<Integer, Integer> distributionData) {
         this.distributionData = distributionData;
-        setPreferredSize(new Dimension(550, 300));
+        setPreferredSize(new Dimension(420, 300));
         setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
@@ -22,7 +22,7 @@ public class DistributionBarPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int barWidth = 30;
+        int barWidth = 20;
         int xOffset = 20;
         int yOffset = getHeight() - 50;
 
