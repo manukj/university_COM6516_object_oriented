@@ -101,6 +101,7 @@ public class Frame {
             container.removeAll();
             renderInputReadFile(wordsInStringBuilder, filePath);
             renderWordAndCountTable(uniGramHashTable);
+            renderStaticsPanel(uniGramHashTable);
             renderBottomLayer(uniGramHashTable);
             container.repaint();
             container.revalidate();
@@ -108,19 +109,25 @@ public class Frame {
 
     }
 
-    public void renderBottomLayer(MyHashTable hashTable) {
-        BottomLayer bottomLayer = new BottomLayer(hashTable, nGramProbabilityCalculation);
-        container.add(bottomLayer, BorderLayout.SOUTH);
+    public void renderInputReadFile(StringBuilder wordsInStringBuilder, String string) {
+        inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, string);
+        container.add(inputReadFilePanel, BorderLayout.WEST);
     }
 
     public void renderWordAndCountTable(MyHashTable hashTable) {
         hashTablePanel = new WordAndCountTable(hashTable);
-        container.add(hashTablePanel, BorderLayout.EAST);
+        container.add(hashTablePanel, BorderLayout.CENTER);
     }
 
-    public void renderInputReadFile(StringBuilder wordsInStringBuilder, String string) {
-        inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, string);
-        container.add(inputReadFilePanel, BorderLayout.CENTER);
+    private void renderStaticsPanel(MyHashTable uniGramHashTable) {
+        BarGraph barGraph = new BarGraph(uniGramHashTable);
+        container.add(barGraph, BorderLayout.EAST);
+    }
+
+    public void renderBottomLayer(MyHashTable hashTable) {
+        ProbabilityCalculationLayer probabilityCalculationLayer = new ProbabilityCalculationLayer(hashTable,
+                nGramProbabilityCalculation);
+        container.add(probabilityCalculationLayer, BorderLayout.SOUTH);
     }
 
     public void cleanUp() {

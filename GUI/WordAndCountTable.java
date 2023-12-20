@@ -26,7 +26,7 @@ public class WordAndCountTable extends JPanel {
 
     public WordAndCountTable(MyHashTable table) {
         setLayout(new BorderLayout());
-        TreeMap<String, Integer> map = table.getWordAndItsCountMap();
+        TreeMap<String, Integer> map = table.getAllWordAndItsCount();
         // render the unique and total word counts in the table
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("| Total words: " + table.getTotalWordCount() + " ||"));
@@ -56,7 +56,7 @@ public class WordAndCountTable extends JPanel {
         if (jTable != null) {
             remove(scrollPane);
         }
-        String[] columnNames = { "Word", "Count" };
+        String[] columnNames = { "Word(Sorted Alphabetically)", "Frequency" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         for (String word : map.keySet()) {
             int count = map.get(word);
@@ -77,7 +77,7 @@ public class WordAndCountTable extends JPanel {
         TreeMap<String, Integer> frequencyOrderMap = new TreeMap<>(
                 Comparator.<String, Integer>comparing(map::get).reversed().thenComparing(Comparator.naturalOrder()));
         frequencyOrderMap.putAll(map);
-        String[] columnNames = { "Word", "Count" };
+        String[] columnNames = { "Word", "Frequency(Sorted By Frequency)" };
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         for (String word : frequencyOrderMap.keySet()) {
             int count = frequencyOrderMap.get(word);

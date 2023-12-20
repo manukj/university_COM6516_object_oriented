@@ -50,7 +50,6 @@ public class MyHashTable {
             // and the unique word count is incremented
             uniqueWordCount += linkedList[hash].setWord(word);
         }
-        System.out.println("Word: " + word + " Hash: " + hash);
     }
 
     /**
@@ -95,7 +94,7 @@ public class MyHashTable {
         return 0;
     }
 
-    public TreeMap<String, Integer> getWordAndItsCountMap() {
+    public TreeMap<String, Integer> getAllWordAndItsCount() {
         TreeMap<String, Integer> map = new TreeMap<>();
         for (int i = 0; i < linkedList.length; i++) {
             MyLinkedObject current = linkedList[i];
