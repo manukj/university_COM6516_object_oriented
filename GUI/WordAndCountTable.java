@@ -17,7 +17,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import hash_table.MyHashTable;
-import hash_table.MyLinkedObject;
 
 public class WordAndCountTable extends JPanel {
     private JTable jTable;
@@ -27,17 +26,7 @@ public class WordAndCountTable extends JPanel {
 
     public WordAndCountTable(MyHashTable table) {
         setLayout(new BorderLayout());
-        TreeMap<String, Integer> map = new TreeMap<>();
-        for (int i = 0; i < table.linkedList.length; i++) {
-            MyLinkedObject current = table.linkedList[i];
-            while (current != null) {
-                String word = current.getWord();
-                int count = current.getCount();
-                // Add the word and count to the table model
-                map.put(word, count);
-                current = current.getNext();
-            }
-        }
+        TreeMap<String, Integer> map = table.getWordAndItsCountMap();
         // render the unique and total word counts in the table
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("| Total words: " + table.getTotalWordCount() + " ||"));

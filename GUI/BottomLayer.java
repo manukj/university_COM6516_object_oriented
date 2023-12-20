@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -22,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import hash_table.MyHashTable;
-import hash_table.MyLinkedObject;
 import n_gram.NGramProbabilityCalculation;
 
 /**
@@ -40,16 +38,7 @@ public class BottomLayer extends JPanel {
         textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
-        Map<Integer, Integer> distributionData = new LinkedHashMap<>();
-        for (int i = 0; i < hashTable.linkedList.length; i++) {
-            int count = 0;
-            MyLinkedObject current = hashTable.linkedList[i];
-            while (current != null) {
-                count++;
-                current = current.getNext();
-            }
-            distributionData.put(i, count);
-        }
+        Map<Integer, Integer> distributionData = hashTable.getWordsCountPresentInEachLinkedList();
 
         renderDistributionBar(hashTable, distributionData);
         renderTextPanel(distributionData);

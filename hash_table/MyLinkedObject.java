@@ -8,7 +8,7 @@ package hash_table;
 /**
  * Represents a linked object in a linked list.
  */
-public class MyLinkedObject {
+class MyLinkedObject {
     private String word;
     private int count;
     private MyLinkedObject next;
