@@ -55,6 +55,7 @@ class MyLinkedObject {
         int result = w.compareTo(word);
         if (result == 0) {
             count++;
+            // indicates that the word already exists
             return 0;
         } else if (result > 0) {
             if (next == null) {
@@ -67,6 +68,7 @@ class MyLinkedObject {
             word = w;
             next = newLinkedObject;
         }
+        // indicates that the new word was added
         return 1;
     }
 
