@@ -1,9 +1,9 @@
 package hash_table;
 
-class SecondHashFunction implements MyHashFunction {
+class PolynomialHashFunction implements MyHashFunction {
     private int hashTableSize;
 
-    public SecondHashFunction(int hashTableSize) {
+    public PolynomialHashFunction(int hashTableSize) {
         this.hashTableSize = hashTableSize;
     }
 

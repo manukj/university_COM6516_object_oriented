@@ -5,10 +5,10 @@ package hash_table;
  * Created on Sun Dec 10 2023
  */
 
-class FirstHashFunction implements MyHashFunction {
+class SimpleHashFunction implements MyHashFunction {
     private int hashTableSize;
 
-    public FirstHashFunction(int hashTableSize) {
+    public SimpleHashFunction(int hashTableSize) {
         this.hashTableSize = hashTableSize;
     }
 

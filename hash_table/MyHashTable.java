@@ -28,7 +28,7 @@ public class MyHashTable {
     public MyHashTable(int m) {
         linkedList = new MyLinkedObject[m];
         hashTableSize = m;
-        hashFunction = new FirstHashFunction(hashTableSize);
+        hashFunction = new SimpleHashFunction(hashTableSize);
     }
 
     /**
