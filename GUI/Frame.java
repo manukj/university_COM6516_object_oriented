@@ -7,6 +7,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,11 +51,12 @@ public class Frame {
     }
 
     private void initaliseFilePicker() {
+
         initalButtonPanel = new JPanel();
         initalButtonPanel.setLayout(new BoxLayout(initalButtonPanel, BoxLayout.Y_AXIS));
 
         JButton pickFileButton = new JButton("Pick File");
-        JButton pickNewsButton = new JButton("Pick News");
+        pickFileButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         pickFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,15 +71,20 @@ public class Frame {
                 }
             }
         });
+
+        JButton pickNewsButton = new JButton("Pick News");
+        pickNewsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         pickNewsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 onPagePicked("./news.txt");
             }
         });
+
+        container.setLayout(new BorderLayout());
         initalButtonPanel.add(pickFileButton);
         initalButtonPanel.add(pickNewsButton);
-        container.add(initalButtonPanel, BorderLayout.NORTH);
+        container.add(initalButtonPanel, BorderLayout.CENTER);
     }
 
     public void onPagePicked(String filePath) {
