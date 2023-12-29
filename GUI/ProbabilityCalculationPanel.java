@@ -21,15 +21,15 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import hash_table.MyHashTable;
-import n_gram.NGramProbabilityCalculation;
+import n_gram.NGramAndProbabilityCalculation;
 
 /**
  * BottomLayer
  */
 public class ProbabilityCalculationPanel extends JPanel {
-    NGramProbabilityCalculation nGramProbabilityCalculation;
+    NGramAndProbabilityCalculation nGramProbabilityCalculation;
 
-    public ProbabilityCalculationPanel(MyHashTable hashTable, NGramProbabilityCalculation nGramProbabilityCalculation) {
+    public ProbabilityCalculationPanel(MyHashTable hashTable, NGramAndProbabilityCalculation nGramProbabilityCalculation) {
         this.nGramProbabilityCalculation = nGramProbabilityCalculation;
 
         JPanel probabilityPanel = new JPanel();

@@ -7,26 +7,41 @@ import java.util.TreeMap;
 import constants.Constants;
 import hash_table.MyHashTable;
 
-public class NGramProbabilityCalculation {
+public class NGramAndProbabilityCalculation {
     private MyHashTable uniGramHashTable, biGramHashTable, triGramHashTable;
 
-    public NGramProbabilityCalculation(String[] uniGramData, MyHashTable uniGramHashTable) {
+    public NGramAndProbabilityCalculation(String[] uniGramData) {
         // generate bi-gram and tri-gram
         NGram biGramData = new NGram(uniGramData, 2);
         NGram triGramData = new NGram(uniGramData, 3);
 
-        // create hash table for bi-gram and tri-gram
-        this.uniGramHashTable = uniGramHashTable;
+        // create hash table for uni-gram bi-gram and tri-gram
+        this.uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
         biGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
         triGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
 
-        // insert bi-gram and tri-gram into hash table
+        // insert uni-gram bi-gram and tri-gram into hash table
+        for (String uniGramWord : uniGramData) {
+            this.uniGramHashTable.add(uniGramWord);
+        }
         for (String biGramWord : biGramData.getArray()) {
             biGramHashTable.add(biGramWord);
         }
         for (String triGramWord : triGramData.getArray()) {
             triGramHashTable.add(triGramWord);
         }
+    }
+
+    public MyHashTable getUniGramHashTable() {
+        return uniGramHashTable;
+    }
+
+    public MyHashTable getBiGramHashTable() {
+        return biGramHashTable;
+    }
+
+    public MyHashTable getTriGramHashTable() {
+        return triGramHashTable;
     }
 
     public int getTotalTriGramWordCount() {

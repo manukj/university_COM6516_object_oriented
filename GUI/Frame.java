@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 
 import constants.Constants;
 import hash_table.MyHashTable;
-import n_gram.NGramProbabilityCalculation;
+import n_gram.NGramAndProbabilityCalculation;
 import util.FileReaderUtil;
 
 public class Frame {
@@ -32,7 +32,7 @@ public class Frame {
     private WordAndCountTablePanel hashTablePanel;
     private InputReadFilePanel inputReadFilePanel;
     private JPanel initalButtonPanel;
-    private NGramProbabilityCalculation nGramProbabilityCalculation;
+    private NGramAndProbabilityCalculation nGram;
 
     public Frame() {
         // write a code to create a Jframe with full screen
@@ -93,23 +93,16 @@ public class Frame {
         if (wordsInStringBuilder != null) {
             String[] data = wordsInStringBuilder.toString().split("\\s+|\\n");
 
-            // create Unigram Hash Table
-            MyHashTable uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
-            for (String word : data) {
-                uniGramHashTable.add(word);
-            }
-
             // initalise a instance of nGramProbabilityCalculation, which is later used for
             // probability calculation
-            nGramProbabilityCalculation = new NGramProbabilityCalculation(data,
-                    uniGramHashTable);
+            nGram = new NGramAndProbabilityCalculation(data);
 
             // render the UI for unigram
             container.removeAll();
             renderInputReadFile(wordsInStringBuilder, filePath);
-            renderWordAndCountTable(uniGramHashTable);
-            renderStaticsPanel(uniGramHashTable);
-            renderBottomLayer(uniGramHashTable);
+            renderWordAndCountTable(nGram.getUniGramHashTable());
+            renderStaticsPanel(nGram.getUniGramHashTable());
+            renderBottomLayer(nGram.getUniGramHashTable());
             container.repaint();
             container.revalidate();
         }
@@ -133,7 +126,7 @@ public class Frame {
 
     public void renderBottomLayer(MyHashTable hashTable) {
         ProbabilityCalculationPanel probabilityCalculationLayer = new ProbabilityCalculationPanel(hashTable,
-                nGramProbabilityCalculation);
+                nGram);
         container.add(probabilityCalculationLayer, BorderLayout.SOUTH);
     }
 
