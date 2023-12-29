@@ -1,33 +1,36 @@
-package n_gram;
+package hash_table;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
 import constants.Constants;
-import hash_table.MyHashTable;
+import constants.Constants.HashFunctionType;
 
 public class NGramAndProbabilityCalculation {
     private MyHashTable uniGramHashTable, biGramHashTable, triGramHashTable;
 
-    public NGramAndProbabilityCalculation(String[] uniGramData) {
+    public NGramAndProbabilityCalculation(String[] uniGramData, HashFunctionType myHashFunctionType) {
         // generate bi-gram and tri-gram
-        NGram biGramData = new NGram(uniGramData, 2);
-        NGram triGramData = new NGram(uniGramData, 3);
+        String[] biGramData = getNGramArray(uniGramData, 2);
+        String[] triGramData = getNGramArray(uniGramData, 3);
 
         // create hash table for uni-gram bi-gram and tri-gram
-        this.uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
-        biGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
-        triGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+        MyHashFunction myHashFunction = myHashFunctionType == HashFunctionType.SIMPLE_HASH_FUNCTION
+                ? new SimpleHashFunction(Constants.HASH_TABLE_SIZE)
+                : new PolynomialHashFunction(Constants.HASH_TABLE_SIZE);
+        uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE, myHashFunction);
+        biGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE, myHashFunction);
+        triGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE, myHashFunction);
 
         // insert uni-gram bi-gram and tri-gram into hash table
         for (String uniGramWord : uniGramData) {
             this.uniGramHashTable.add(uniGramWord);
         }
-        for (String biGramWord : biGramData.getArray()) {
+        for (String biGramWord : biGramData) {
             biGramHashTable.add(biGramWord);
         }
-        for (String triGramWord : triGramData.getArray()) {
+        for (String triGramWord : triGramData) {
             triGramHashTable.add(triGramWord);
         }
     }
@@ -133,6 +136,22 @@ public class NGramAndProbabilityCalculation {
             input += " " + mostProbableWord;
         }
         return input;
+    }
+
+    private String[] getNGramArray(String[] uniGram, int n) {
+        String[] nGramArray = new String[uniGram.length - n + 1];
+        // iterate through the array and create ngram
+        if (uniGram.length < n) {
+            System.out.println("The value of n is greater than the length of the array");
+        }
+        for (int i = 0; i < uniGram.length - n + 1; i++) {
+            String[] temp = new String[n];
+            for (int j = 0; j < n; j++) {
+                temp[j] = uniGram[i + j];
+            }
+            nGramArray[i] = String.join(" ", temp);
+        }
+        return nGramArray;
     }
 
 }

@@ -22,8 +22,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import constants.Constants;
+import constants.Constants.HashFunctionType;
 import hash_table.MyHashTable;
-import n_gram.NGramAndProbabilityCalculation;
+import hash_table.NGramAndProbabilityCalculation;
 import util.FileReaderUtil;
 
 public class Frame {
@@ -87,6 +88,10 @@ public class Frame {
         container.add(initalButtonPanel, BorderLayout.CENTER);
     }
 
+    public void toggleMyHashFunction() {
+        // nGram.toggleMyHashFunction();
+    }
+
     public void onPagePicked(String filePath) {
         StringBuilder wordsInStringBuilder = FileReaderUtil.readFile(filePath, Constants.MAX_CHAR_LIMIT);
 
@@ -95,7 +100,7 @@ public class Frame {
 
             // initalise a instance of nGramProbabilityCalculation, which is later used for
             // probability calculation
-            nGram = new NGramAndProbabilityCalculation(data);
+            nGram = new NGramAndProbabilityCalculation(data, HashFunctionType.SIMPLE_HASH_FUNCTION);
 
             // render the UI for unigram
             container.removeAll();

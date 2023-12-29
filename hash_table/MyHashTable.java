@@ -16,7 +16,6 @@ import java.util.TreeMap;
  */
 public class MyHashTable {
     public MyLinkedObject[] linkedList;
-    private int hashTableSize;
     private MyHashFunction hashFunction;
     private int totalWordCount = 0, uniqueWordCount = 0;
 
@@ -25,10 +24,9 @@ public class MyHashTable {
      * 
      * @param m the size of the hash table
      */
-    public MyHashTable(int m) {
+    public MyHashTable(int m, MyHashFunction hashFunction) {
         linkedList = new MyLinkedObject[m];
-        hashTableSize = m;
-        hashFunction = new SimpleHashFunction(hashTableSize);
+        this.hashFunction = hashFunction;
     }
 
     /**

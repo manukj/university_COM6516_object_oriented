@@ -21,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import hash_table.MyHashTable;
-import n_gram.NGramAndProbabilityCalculation;
+import hash_table.NGramAndProbabilityCalculation;
 
 /**
  * BottomLayer
