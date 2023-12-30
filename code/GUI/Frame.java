@@ -26,6 +26,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
+import GUI.BarGraphPanel;
+import GUI.InputReadFilePanel;
+import GUI.ProbabilityCalculationPanel;
+import GUI.WordAndCountTablePanel;
 import constants.Constants;
 import constants.Constants.HashFunctionType;
 import hash_table.MyHashTable;
@@ -48,11 +52,13 @@ public class Frame {
         // by default use simple hash function
         hashFunctionType = HashFunctionType.SIMPLE_HASH_FUNCTION;
         container = frame.getContentPane();
+    }
+
+    public void renderFrame() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setVisible(true);
-
-        initaliseFilePicker();
+        renderFilePicker();
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 cleanUp();
@@ -60,8 +66,7 @@ public class Frame {
         });
     }
 
-    private void initaliseFilePicker() {
-
+    private void renderFilePicker() {
         initalButtonPanel = new JPanel();
         initalButtonPanel.setLayout(new BoxLayout(initalButtonPanel, BoxLayout.Y_AXIS));
 
