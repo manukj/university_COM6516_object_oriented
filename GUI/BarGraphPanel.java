@@ -41,12 +41,12 @@ public class BarGraphPanel extends JPanel {
     }
 
     private void renderTextPanel(Map<Integer, Integer> distributionData) {
-        JLabel titleLabel = new JLabel("Word Distribution in Linked List");
+        JLabel titleLabel = new JLabel("Word Distribution in Hash Table");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel subTitleLabel = new JLabel(
-                "<html>The bars represent the number of Unique words in each index of the linked list</html>");
+                "<html>The bars represent the number of Unique words in each index of the Hash Table</html>");
         subTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         String[] columnNames = { "Index", "Total Words" };
