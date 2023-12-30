@@ -6,6 +6,7 @@ package GUI;
  */
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.Comparator;
 import java.util.TreeMap;
 
@@ -65,6 +66,7 @@ public class WordAndCountTablePanel extends JPanel {
         jTable = new JTable(model);
         jTable.setAutoCreateRowSorter(true);
         scrollPane = new JScrollPane(jTable);
+        scrollPane.setPreferredSize(new Dimension(500, 500));
         add(scrollPane, BorderLayout.CENTER);
     }
 

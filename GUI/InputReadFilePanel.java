@@ -22,7 +22,7 @@ public class InputReadFilePanel extends JPanel {
 
 
         scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(400, 300));
+        scrollPane.setPreferredSize(new Dimension(500, 500));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("File: " + filePath));

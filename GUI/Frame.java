@@ -7,8 +7,10 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -19,7 +21,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 
 import constants.Constants;
 import constants.Constants.HashFunctionType;
@@ -34,10 +39,14 @@ public class Frame {
     private InputReadFilePanel inputReadFilePanel;
     private JPanel initalButtonPanel;
     private NGramAndProbabilityCalculation nGram;
+    private HashFunctionType hashFunctionType;
+    private String selectedFilePath = null;
 
     public Frame() {
         // write a code to create a Jframe with full screen
         frame = new JFrame();
+        // by default use simple hash function
+        hashFunctionType = HashFunctionType.SIMPLE_HASH_FUNCTION;
         container = frame.getContentPane();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -89,50 +98,110 @@ public class Frame {
     }
 
     public void toggleMyHashFunction() {
-        // nGram.toggleMyHashFunction();
+        if (selectedFilePath != null) {
+            if (hashFunctionType == HashFunctionType.SIMPLE_HASH_FUNCTION) {
+                hashFunctionType = HashFunctionType.POLYNOMIAL_HASH_FUNCTION;
+            } else {
+                hashFunctionType = HashFunctionType.SIMPLE_HASH_FUNCTION;
+            }
+            onPagePicked(selectedFilePath);
+        }
     }
 
     public void onPagePicked(String filePath) {
+        selectedFilePath = filePath;
+        renderLoader();
         StringBuilder wordsInStringBuilder = FileReaderUtil.readFile(filePath, Constants.MAX_CHAR_LIMIT);
+        String[] data = wordsInStringBuilder.toString().split("\\s+|\\n");
+        // initalise a instance of nGramProbabilityCalculation, which is later used for
+        // probability calculation
+        nGram = new NGramAndProbabilityCalculation(data, hashFunctionType);
 
-        if (wordsInStringBuilder != null) {
-            String[] data = wordsInStringBuilder.toString().split("\\s+|\\n");
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                // Simulate to show that the data is being processed using the new hash function
+                Thread.sleep(1000);
+                return null;
+            }
 
-            // initalise a instance of nGramProbabilityCalculation, which is later used for
-            // probability calculation
-            nGram = new NGramAndProbabilityCalculation(data, HashFunctionType.SIMPLE_HASH_FUNCTION);
-
-            // render the UI for unigram
-            container.removeAll();
-            renderInputReadFile(wordsInStringBuilder, filePath);
-            renderWordAndCountTable(nGram.getUniGramHashTable());
-            renderStaticsPanel(nGram.getUniGramHashTable());
-            renderBottomLayer(nGram.getUniGramHashTable());
-            container.repaint();
-            container.revalidate();
-        }
+            @Override
+            protected void done() {
+                if (nGram != null) {
+                    // render the UI for unigram
+                    container.removeAll();
+                    renderTopComponent();
+                    renderLeftComponent(wordsInStringBuilder, filePath, nGram.getUniGramHashTable());
+                    renderRightComponent(nGram.getUniGramHashTable());
+                    container.repaint();
+                    container.revalidate();
+                }
+            }
+        };
+        worker.execute();
 
     }
 
-    public void renderInputReadFile(StringBuilder wordsInStringBuilder, String string) {
-        inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, string);
-        container.add(inputReadFilePanel, BorderLayout.WEST);
+    private void renderLeftComponent(StringBuilder wordsInStringBuilder, String filePath,
+            MyHashTable uniGramHashTable) {
+
+        JPanel verticalPanel = new JPanel();
+        verticalPanel.setLayout(new BorderLayout());
+        inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, filePath);
+        hashTablePanel = new WordAndCountTablePanel(uniGramHashTable);
+        ProbabilityCalculationPanel probabilityCalculationLayer = new ProbabilityCalculationPanel(uniGramHashTable,
+                nGram);
+
+        JPanel horizontalPanel = new JPanel();
+        horizontalPanel.add(inputReadFilePanel);
+        horizontalPanel.add(hashTablePanel);
+
+        // Add components to the main panel
+        verticalPanel.add(horizontalPanel, BorderLayout.NORTH); // Top components
+        verticalPanel.add(probabilityCalculationLayer, BorderLayout.SOUTH); // Bottom component
+
+        container.add(verticalPanel);
     }
 
-    public void renderWordAndCountTable(MyHashTable hashTable) {
-        hashTablePanel = new WordAndCountTablePanel(hashTable);
-        container.add(hashTablePanel, BorderLayout.CENTER);
+    private void renderTopComponent() {
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        JLabel titleLabel = new JLabel("\"" +
+                hashFunctionType.getDisplayName() + "\" is used to calculate the below results");
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JButton toggleHashFunctionButton = new JButton("Change Hash Function");
+        toggleHashFunctionButton.setBackground(Color.BLUE);
+        toggleHashFunctionButton.setOpaque(true);
+        toggleHashFunctionButton.setHorizontalAlignment(SwingConstants.CENTER);
+        toggleHashFunctionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        toggleHashFunctionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                toggleMyHashFunction();
+            }
+        });
+        topPanel.add(titleLabel);
+        topPanel.add(toggleHashFunctionButton);
+        container.add(topPanel, BorderLayout.NORTH);
     }
 
-    private void renderStaticsPanel(MyHashTable uniGramHashTable) {
+    private void renderLoader() {
+        JLabel progressBarText = new JLabel();
+        progressBarText.setText("Processing data with the " + hashFunctionType.getDisplayName() + ". Please wait...");
+        progressBarText.setHorizontalAlignment(SwingConstants.CENTER);
+        progressBarText.setFont(new Font("Arial", Font.BOLD, 26));
+        container.removeAll();
+        container.add(progressBarText, BorderLayout.CENTER);
+        container.revalidate();
+        container.repaint();
+    }
+
+    private void renderRightComponent(MyHashTable uniGramHashTable) {
         BarGraphPanel barGraph = new BarGraphPanel(uniGramHashTable);
         container.add(barGraph, BorderLayout.EAST);
-    }
-
-    public void renderBottomLayer(MyHashTable hashTable) {
-        ProbabilityCalculationPanel probabilityCalculationLayer = new ProbabilityCalculationPanel(hashTable,
-                nGram);
-        container.add(probabilityCalculationLayer, BorderLayout.SOUTH);
     }
 
     public void cleanUp() {
