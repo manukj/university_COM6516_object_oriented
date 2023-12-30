@@ -110,8 +110,11 @@ public class NGramAndProbabilityCalculation {
     }
 
     public String get20MostFrequentWordsUsingTrigram(String input) {
-        if (input.isEmpty() || input.split(" ").length < 2) {
+        if (input.isEmpty()) {
             throw new IllegalArgumentException("Cannot predict next word, since input is empty");
+        }
+        if (input.split(" ").length < 2) {
+            throw new IllegalArgumentException("Cannot predict next word, since input is less than 2 words");
         }
         String[] inputWords = input.split(" ");
         if (biGramHashTable

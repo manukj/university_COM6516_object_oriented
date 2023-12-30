@@ -88,6 +88,7 @@ public class WordAndCountTablePanel extends JPanel {
         jTable = new JTable(model);
         jTable.setAutoCreateRowSorter(true);
         scrollPane = new JScrollPane(jTable);
+        scrollPane.setPreferredSize(new Dimension(500, 500));
         add(scrollPane, BorderLayout.CENTER);
     }
 
