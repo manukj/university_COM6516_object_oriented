@@ -32,7 +32,7 @@ public class WordAndCountTablePanel extends JPanel {
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("| Total words: " + table.getTotalWordCount() + " ||"));
         topPanel.add(new JLabel("|| Total Unique Words: " + table.getUniqueWordCount() + " |"));
-        JButton sortButton = new JButton("Toogle Sort");
+        JButton sortButton = new JButton("Change Sort order");
         sortButton.addActionListener(e -> {
             if (isSortedByAlphabetical) {
                 renderByFrequency(map);
