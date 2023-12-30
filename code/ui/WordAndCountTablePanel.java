@@ -1,4 +1,4 @@
-package GUI;
+package ui;
 /*
  * Author : Manu Kenchappa Junjanna
  * Email : mkenchappajunjanna1@sheffield.ac.uk

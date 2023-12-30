@@ -4,7 +4,7 @@
  * Created on Sun Dec 10 2023
  */
 
-package GUI;
+package ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,10 +26,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
-import GUI.BarGraphPanel;
-import GUI.InputReadFilePanel;
-import GUI.ProbabilityCalculationPanel;
-import GUI.WordAndCountTablePanel;
+import ui.BarGraphPanel;
+import ui.InputReadFilePanel;
+import ui.ProbabilityCalculationPanel;
+import ui.WordAndCountTablePanel;
 import constants.Constants;
 import constants.Constants.HashFunctionType;
 import hash_table.MyHashTable;

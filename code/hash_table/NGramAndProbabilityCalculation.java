@@ -19,9 +19,12 @@ public class NGramAndProbabilityCalculation {
         MyHashFunction myHashFunction = myHashFunctionType == HashFunctionType.SIMPLE_HASH_FUNCTION
                 ? new SimpleHashFunction(Constants.HASH_TABLE_SIZE)
                 : new PolynomialHashFunction(Constants.HASH_TABLE_SIZE);
-        uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE, myHashFunction);
-        biGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE, myHashFunction);
-        triGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE, myHashFunction);
+        uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+        uniGramHashTable.setMyHashFunction(myHashFunction);
+        biGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+        biGramHashTable.setMyHashFunction(myHashFunction);
+        triGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+        triGramHashTable.setMyHashFunction(myHashFunction);
 
         // insert uni-gram bi-gram and tri-gram into hash table
         for (String uniGramWord : uniGramData) {

@@ -24,8 +24,11 @@ public class MyHashTable {
      * 
      * @param m the size of the hash table
      */
-    public MyHashTable(int m, MyHashFunction hashFunction) {
+    public MyHashTable(int m) {
         linkedList = new MyLinkedObject[m];
+    }
+
+    public void setMyHashFunction(MyHashFunction hashFunction) {
         this.hashFunction = hashFunction;
     }
 

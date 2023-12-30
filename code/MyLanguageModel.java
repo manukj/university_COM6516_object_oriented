@@ -4,7 +4,7 @@
  * Created on Sun Dec 3 2023
  */
 
-import GUI.Frame;
+import ui.Frame;
 
 public class MyLanguageModel {
 
