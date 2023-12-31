@@ -66,24 +66,6 @@ public class NGramAndProbabilityCalculation {
         return triGramHashTable.getUniqueWordCount();
     }
 
-    private double getBiGramProbability(String wordK_1, String wordK, int countK_1) {
-        int countK_1_K = biGramHashTable.getCount(wordK_1 + " " + wordK);
-        if (countK_1 == 0) {
-            return 0;
-        }
-        return (double) countK_1_K / countK_1;
-    }
-
-    private double getTriGramProbability(String wordK_2, String wordK_1, String wordK) {
-        int countK_2_K_1 = biGramHashTable.getCount(wordK_2 + " " + wordK_1);
-        int countK_2_K_1_K = triGramHashTable.getCount(wordK_2 + " " + wordK_1 + " " + wordK);
-        if (countK_2_K_1 == 0) {
-            return 0;
-        }
-        return (double) countK_2_K_1_K / countK_2_K_1;
-
-    }
-
     public String get20MostFrequentWordsUsingBigram(String input) {
         if (input.isEmpty()) {
             throw new IllegalArgumentException("Cannot predict next word, since input is empty");
@@ -101,8 +83,12 @@ public class NGramAndProbabilityCalculation {
             for (Map.Entry<String, Integer> entry : uniGramHashTable.getAllWordAndItsCount().entrySet()) {
                 String word_k = entry.getKey();
                 double probabilityValue = getBiGramProbability(word_k_1, word_k, countK_1);
+                // put the probability as key and word as value, and sorts the map in
+                // descending
                 probability.put(probabilityValue, word_k);
             }
+            // so at the end of the loop, the first element of the map will be the most
+            // probable word with highest probability
             String mostProbableWord = probability.values().iterator().next();
             String mostProbableWordProbability = probability.keySet().iterator().next().toString();
             System.out.println("mostProbableWord = " + mostProbableWord + " mostProbableWordProbability = "
@@ -133,8 +119,12 @@ public class NGramAndProbabilityCalculation {
             for (Map.Entry<String, Integer> entry : uniGramHashTable.getAllWordAndItsCount().entrySet()) {
                 String word_k = entry.getKey();
                 double probabilityValue = getTriGramProbability(word_k_2, word_k_1, word_k);
+                // put the probability as key and word as value, and sorts the map in
+                // descending
                 probability.put(probabilityValue, word_k);
             }
+            // so at the end of the loop, the first element of the map will be the most
+            // probable word with highest probability
             String mostProbableWord = probability.values().iterator().next();
             String mostProbableWordProbability = probability.keySet().iterator().next().toString();
             System.out.println("mostProbableWord = " + mostProbableWord + " mostProbableWordProbability = "
@@ -142,6 +132,23 @@ public class NGramAndProbabilityCalculation {
             input += " " + mostProbableWord;
         }
         return input;
+    }
+
+    private double getBiGramProbability(String previousWord, String currentWord, int previousWordCount) {
+        int currentWordPairCount = biGramHashTable.getCount(previousWord + " " + currentWord);
+        if (previousWordCount == 0) {
+            return 0;
+        }
+        return (double) currentWordPairCount / previousWordCount;
+    }
+
+    private double getTriGramProbability(String previousTwoWords, String previousWord, String currentWord) {
+        int countBiGram = biGramHashTable.getCount(previousTwoWords + " " + previousWord);
+        int countTriGram = triGramHashTable.getCount(previousTwoWords + " " + previousWord + " " + currentWord);
+        if (countBiGram == 0) {
+            return 0;
+        }
+        return (double) countTriGram / countBiGram;
     }
 
     private String[] getNGramArray(String[] uniGram, int n) {
