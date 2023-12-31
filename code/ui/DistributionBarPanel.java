@@ -14,8 +14,15 @@ public class DistributionBarPanel extends JPanel {
 
     public DistributionBarPanel(Map<Integer, Integer> distributionData) {
         this.distributionData = distributionData;
-        setPreferredSize(new Dimension(420, 300));
-        setBorder(BorderFactory.createLineBorder(Color.black));
+        int maxKey = 0;
+        for (int key : distributionData.keySet()) {
+            if (key > maxKey) {
+                maxKey = key;
+            }
+        }
+        System.out.println("maxKey = " + maxKey);
+        int panelWidth = (maxKey + 1) * 40 + 20;
+        setPreferredSize(new Dimension(panelWidth, 300));
     }
 
     @Override
@@ -44,7 +51,7 @@ public class DistributionBarPanel extends JPanel {
             g.fillRect(xOffset, yOffset - barHeight, barWidth, barHeight);
 
             g.setColor(Color.RED);
-            g.drawString("i = " + index, xOffset, getHeight() - 20);
+            g.drawString("i=" + index, xOffset, getHeight() - 20);
 
             xOffset += barWidth + 20;
         }

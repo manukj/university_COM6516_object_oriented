@@ -32,12 +32,14 @@ public class BarGraphPanel extends JPanel {
         distributionPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         renderDistributionBar(hashTable, distributionData);
         add(distributionPanel);
-
     }
 
     private void renderDistributionBar(MyHashTable hashTable, Map<Integer, Integer> distributionData) {
         DistributionBarPanel chart = new DistributionBarPanel(distributionData);
-        distributionPanel.add(chart);
+        JScrollPane scrollPane = new JScrollPane(chart);
+        scrollPane.setPreferredSize(new Dimension(420, 300));
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        distributionPanel.add(scrollPane);
     }
 
     private void renderTextPanel(Map<Integer, Integer> distributionData) {
@@ -58,10 +60,10 @@ public class BarGraphPanel extends JPanel {
         }
 
         JTable jTable = new JTable(model);
-        jTable.setPreferredSize(new Dimension(240, 200));
         jTable.setAutoCreateRowSorter(true);
 
         JScrollPane scrollPane = new JScrollPane(jTable);
+        scrollPane.setPreferredSize(new Dimension(240, 300));
 
         textPanel.add(titleLabel);
         textPanel.add(subTitleLabel);
