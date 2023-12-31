@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +36,10 @@ import constants.Constants.HashFunctionType;
 import hash_table.MyHashTable;
 import hash_table.NGramAndProbabilityCalculation;
 import util.FileReaderUtil;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class Frame {
     private JFrame frame;
@@ -45,6 +50,7 @@ public class Frame {
     private NGramAndProbabilityCalculation nGram;
     private HashFunctionType hashFunctionType;
     private String selectedFilePath = null;
+    private int hashTableSize = Constants.HASH_TABLE_SIZE;
 
     public Frame() {
         // write a code to create a Jframe with full screen
@@ -120,7 +126,7 @@ public class Frame {
         String[] data = wordsInStringBuilder.toString().split("\\s+|\\n");
         // initalise a instance of nGramProbabilityCalculation, which is later used for
         // probability calculation
-        nGram = new NGramAndProbabilityCalculation(data, hashFunctionType);
+        nGram = new NGramAndProbabilityCalculation(data, hashFunctionType, hashTableSize);
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
@@ -195,7 +201,8 @@ public class Frame {
 
     private void renderLoader() {
         JLabel progressBarText = new JLabel();
-        progressBarText.setText("Processing data with the " + hashFunctionType.getDisplayName() + ". Please wait...");
+        progressBarText.setText("Processing '" + selectedFilePath + "' using " + hashFunctionType.getDisplayName()
+                + " and Hash Table Size " + hashTableSize + ".\nPlease wait...");
         progressBarText.setHorizontalAlignment(SwingConstants.CENTER);
         progressBarText.setFont(new Font("Arial", Font.BOLD, 26));
         container.removeAll();
@@ -204,9 +211,47 @@ public class Frame {
         container.repaint();
     }
 
+    // ...
+
     private void renderRightComponent(MyHashTable uniGramHashTable) {
         BarGraphPanel barGraph = new BarGraphPanel(uniGramHashTable);
         container.add(barGraph, BorderLayout.EAST);
+
+        // Create the panel with text field and button
+        JPanel textFieldButtonPanel = new JPanel();
+        textFieldButtonPanel.setLayout(new BoxLayout(textFieldButtonPanel, BoxLayout.X_AXIS));
+
+        JTextField textField = new JTextField(10);
+        textField.setToolTipText("Hash Table Size (Press Enter to update)");
+        textField.setMaximumSize(new Dimension(100, 30));
+        JButton button = new JButton("Update Hash Table Size");
+        textFieldButtonPanel.add(new JLabel("Current Table Size:" + hashTableSize + " "));
+        textFieldButtonPanel.add(textField);
+        textFieldButtonPanel.add(button);
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = textField.getText();
+                try {
+                    int newSize = Integer.parseInt(text);
+                    if (newSize > 0) {
+                        hashTableSize = newSize;
+                        onPagePicked(selectedFilePath);
+                    }
+                } catch (NumberFormatException ex) {
+                    System.out.println("Invalid input");
+                }
+            }
+        });
+
+        // Align the panel vertically to the barGraph panel
+        JPanel verticalPanel = new JPanel();
+        verticalPanel.add(textFieldButtonPanel);
+        verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
+        verticalPanel.add(barGraph);
+
+        container.add(verticalPanel, BorderLayout.EAST);
     }
 
     public void cleanUp() {

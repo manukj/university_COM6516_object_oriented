@@ -10,20 +10,24 @@ import constants.Constants.HashFunctionType;
 public class NGramAndProbabilityCalculation {
     private MyHashTable uniGramHashTable, biGramHashTable, triGramHashTable;
 
-    public NGramAndProbabilityCalculation(String[] uniGramData, HashFunctionType myHashFunctionType) {
+    public NGramAndProbabilityCalculation(String[] uniGramData, HashFunctionType myHashFunctionType,
+            int hashTableSize) {
         // generate bi-gram and tri-gram
         String[] biGramData = getNGramArray(uniGramData, 2);
         String[] triGramData = getNGramArray(uniGramData, 3);
 
         // create hash table for uni-gram bi-gram and tri-gram
         MyHashFunction myHashFunction = myHashFunctionType == HashFunctionType.SIMPLE_HASH_FUNCTION
-                ? new SimpleHashFunction(Constants.HASH_TABLE_SIZE)
-                : new PolynomialHashFunction(Constants.HASH_TABLE_SIZE);
-        uniGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+                ? new SimpleHashFunction(hashTableSize)
+                : new PolynomialHashFunction(hashTableSize);
+
+        uniGramHashTable = new MyHashTable(hashTableSize);
         uniGramHashTable.setMyHashFunction(myHashFunction);
-        biGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+
+        biGramHashTable = new MyHashTable(hashTableSize);
         biGramHashTable.setMyHashFunction(myHashFunction);
-        triGramHashTable = new MyHashTable(Constants.HASH_TABLE_SIZE);
+
+        triGramHashTable = new MyHashTable(hashTableSize);
         triGramHashTable.setMyHashFunction(myHashFunction);
 
         // insert uni-gram bi-gram and tri-gram into hash table
