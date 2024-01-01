@@ -29,9 +29,40 @@ public class StatisticsValuePanel extends JPanel {
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 
         renderTextPanel(distributionData);
+        renderStaticalData(distributionData);
         distributionPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         renderDistributionBar(hashTable, distributionData);
         add(distributionPanel);
+    }
+
+    private void renderStaticalData(Map<Integer, Integer> distributionData) {
+        int totalWords = 0;
+        int totalLinkedList = 0;
+        for (Map.Entry<Integer, Integer> entry : distributionData.entrySet()) {
+            int frequency = entry.getValue();
+            totalWords += frequency;
+            if (frequency > 0) {
+                totalLinkedList++;
+            }
+        }
+        double average = (double) totalWords / totalLinkedList;
+        double standardDeviation = 0;
+        for (Map.Entry<Integer, Integer> entry : distributionData.entrySet()) {
+            int frequency = entry.getValue();
+            if (frequency > 0) {
+                standardDeviation += Math.pow(frequency - average, 2);
+            }
+        }
+        standardDeviation = Math.sqrt(standardDeviation / totalLinkedList);
+
+        JLabel averageLabel = new JLabel("Average: " + average);
+        JLabel standardDeviationLabel = new JLabel("Standard Deviation: " + standardDeviation);
+        averageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        standardDeviationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        distributionPanel.add(averageLabel);
+        distributionPanel.add(standardDeviationLabel);
+        System.out.println("Average: " + average);
+        System.out.println("Standard Deviation: " + standardDeviation);
     }
 
     private void renderDistributionBar(MyHashTable hashTable, Map<Integer, Integer> distributionData) {

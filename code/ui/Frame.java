@@ -226,7 +226,8 @@ public class Frame {
         textField.setToolTipText("Hash Table Size (Press Enter to update)");
         textField.setMaximumSize(new Dimension(100, 30));
         JButton button = new JButton("Update Hash Table Size");
-        textFieldButtonPanel.add(new JLabel("Current Table Size:" + hashTableSize + " "));
+        textFieldButtonPanel.add(new JLabel("Current Table Size:" + " "));
+        textField.setText(hashTableSize + "");
         textFieldButtonPanel.add(textField);
         textFieldButtonPanel.add(button);
 
