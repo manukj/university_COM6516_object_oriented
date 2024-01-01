@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import javax.swing.Box;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,7 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
-import ui.BarGraphPanel;
+import ui.StatisticsValuePanel;
 import ui.InputReadFilePanel;
 import ui.ProbabilityCalculationPanel;
 import ui.WordAndCountTablePanel;
@@ -214,7 +215,7 @@ public class Frame {
     // ...
 
     private void renderRightComponent(MyHashTable uniGramHashTable) {
-        BarGraphPanel barGraph = new BarGraphPanel(uniGramHashTable);
+        StatisticsValuePanel barGraph = new StatisticsValuePanel(uniGramHashTable);
         container.add(barGraph, BorderLayout.EAST);
 
         // Create the panel with text field and button
@@ -247,10 +248,15 @@ public class Frame {
 
         // Align the panel vertically to the barGraph panel
         JPanel verticalPanel = new JPanel();
-        verticalPanel.add(textFieldButtonPanel);
         verticalPanel.setLayout(new BoxLayout(verticalPanel, BoxLayout.Y_AXIS));
-        verticalPanel.add(barGraph);
 
+        JLabel titleLabel = new JLabel("Change Hash Table Size");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        titleLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        verticalPanel.add(titleLabel);
+        verticalPanel.add(textFieldButtonPanel);
+        verticalPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalPanel.add(barGraph);
         container.add(verticalPanel, BorderLayout.EAST);
     }
 
