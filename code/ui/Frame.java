@@ -17,30 +17,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import javax.swing.Box;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
 
-import ui.StatisticsValuePanel;
-import ui.InputReadFilePanel;
-import ui.ProbabilityCalculationPanel;
-import ui.WordAndCountTablePanel;
 import constants.Constants;
 import constants.Constants.HashFunctionType;
 import hash_table.MyHashTable;
 import hash_table.NGramAndProbabilityCalculation;
 import util.FileReaderUtil;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 public class Frame {
     private JFrame frame;
@@ -124,9 +119,21 @@ public class Frame {
         selectedFilePath = filePath;
         renderLoader();
         StringBuilder wordsInStringBuilder = FileReaderUtil.readFile(filePath, Constants.MAX_CHAR_LIMIT);
-        String[] data = wordsInStringBuilder.toString().split("\\s+|\\n");
+        String[] words = wordsInStringBuilder.toString().split("\\s+|\\n");
+        List<String> correctWords = new ArrayList<>();
+        List<String> missProcessedWords = new ArrayList<>();
+
+        for (String word : words) {
+            if (word.matches(".*[^a-z'.].*")) {
+                missProcessedWords.add(word);
+            } else {
+                correctWords.add(word);
+            }
+        }
+
         // initalise a instance of nGramProbabilityCalculation, which is later used for
         // probability calculation
+        String[] data = correctWords.toArray(new String[0]);
         nGram = new NGramAndProbabilityCalculation(data, hashFunctionType, hashTableSize);
 
         SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
@@ -143,7 +150,7 @@ public class Frame {
                     // render the UI for unigram
                     container.removeAll();
                     renderTopComponent();
-                    renderLeftComponent(wordsInStringBuilder, filePath, nGram.getUniGramHashTable());
+                    renderLeftComponent(String.join(" ", correctWords), filePath, nGram.getUniGramHashTable());
                     renderRightComponent(nGram.getUniGramHashTable());
                     container.repaint();
                     container.revalidate();
@@ -154,12 +161,12 @@ public class Frame {
 
     }
 
-    private void renderLeftComponent(StringBuilder wordsInStringBuilder, String filePath,
+    private void renderLeftComponent(String data, String filePath,
             MyHashTable uniGramHashTable) {
 
         JPanel verticalPanel = new JPanel();
         verticalPanel.setLayout(new BorderLayout());
-        inputReadFilePanel = new InputReadFilePanel(wordsInStringBuilder, filePath);
+        inputReadFilePanel = new InputReadFilePanel(data, filePath);
         hashTablePanel = new WordAndCountTablePanel(uniGramHashTable);
         ProbabilityCalculationPanel probabilityCalculationLayer = new ProbabilityCalculationPanel(uniGramHashTable,
                 nGram);

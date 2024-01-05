@@ -13,7 +13,7 @@ public class InputReadFilePanel extends JPanel {
     private JTextArea textArea;
     private JScrollPane scrollPane;
 
-    public InputReadFilePanel(StringBuilder wordsBuilder, String filePath) {
+    public InputReadFilePanel(String data, String filePath) {
         setLayout(new BorderLayout());
         textArea = new JTextArea();
         textArea.setLineWrap(true);
@@ -31,7 +31,7 @@ public class InputReadFilePanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         // Load file content on initialization
-        textArea.setText(wordsBuilder.toString());
+        textArea.setText(data.toString());
     }
 
     public void cleanUp() {
