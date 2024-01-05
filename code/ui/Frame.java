@@ -84,7 +84,7 @@ public class Frame {
 
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    onPagePicked(selectedFile.getAbsolutePath());
+                    onFilePicked(selectedFile.getAbsolutePath());
                 }
             }
         });
@@ -94,7 +94,7 @@ public class Frame {
         pickNewsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                onPagePicked("./news.txt");
+                onFilePicked("./news.txt");
             }
         });
 
@@ -111,11 +111,11 @@ public class Frame {
             } else {
                 hashFunctionType = HashFunctionType.SIMPLE_HASH_FUNCTION;
             }
-            onPagePicked(selectedFilePath);
+            onFilePicked(selectedFilePath);
         }
     }
 
-    public void onPagePicked(String filePath) {
+    public void onFilePicked(String filePath) {
         selectedFilePath = filePath;
         renderLoader();
         StringBuilder wordsInStringBuilder = FileReaderUtil.readFile(filePath, Constants.MAX_CHAR_LIMIT);
@@ -150,7 +150,8 @@ public class Frame {
                     // render the UI for unigram
                     container.removeAll();
                     renderTopComponent();
-                    renderLeftComponent(String.join(" ", correctWords), filePath, nGram.getUniGramHashTable());
+                    renderLeftComponent(String.join(" ", correctWords), filePath, nGram.getUniGramHashTable(),
+                            missProcessedWords.toArray(new String[0]));
                     renderRightComponent(nGram.getUniGramHashTable());
                     container.repaint();
                     container.revalidate();
@@ -162,11 +163,11 @@ public class Frame {
     }
 
     private void renderLeftComponent(String data, String filePath,
-            MyHashTable uniGramHashTable) {
+            MyHashTable uniGramHashTable, String[] misProcessedWords) {
 
         JPanel verticalPanel = new JPanel();
         verticalPanel.setLayout(new BorderLayout());
-        inputReadFilePanel = new InputReadFilePanel(data, filePath);
+        inputReadFilePanel = new InputReadFilePanel(data, filePath, misProcessedWords);
         hashTablePanel = new WordAndCountTablePanel(uniGramHashTable);
         ProbabilityCalculationPanel probabilityCalculationLayer = new ProbabilityCalculationPanel(uniGramHashTable,
                 nGram);
@@ -246,7 +247,7 @@ public class Frame {
                     int newSize = Integer.parseInt(text);
                     if (newSize > 0) {
                         hashTableSize = newSize;
-                        onPagePicked(selectedFilePath);
+                        onFilePicked(selectedFilePath);
                     }
                 } catch (NumberFormatException ex) {
                     System.out.println("Invalid input");
