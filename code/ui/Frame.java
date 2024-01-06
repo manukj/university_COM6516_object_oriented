@@ -7,7 +7,6 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -59,6 +58,7 @@ public class Frame {
     public void renderFrame() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setSize(new Dimension(500 * 2,frame.getHeight()));
         frame.setVisible(true);
         renderFilePicker();
         frame.addWindowListener(new WindowAdapter() {
@@ -102,6 +102,8 @@ public class Frame {
         initalButtonPanel.add(pickFileButton);
         initalButtonPanel.add(pickNewsButton);
         container.add(initalButtonPanel, BorderLayout.CENTER);
+        container.repaint();
+        container.revalidate();
     }
 
     public void toggleMyHashFunction() {
@@ -192,8 +194,6 @@ public class Frame {
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JButton toggleHashFunctionButton = new JButton("Change Hash Function");
-        toggleHashFunctionButton.setBackground(Color.BLUE);
-        toggleHashFunctionButton.setOpaque(true);
         toggleHashFunctionButton.setHorizontalAlignment(SwingConstants.CENTER);
         toggleHashFunctionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
